@@ -28,35 +28,35 @@ public class projTest {
 
     @Test
     public void Test01 (){
-        Assert.assertEquals("test typu vstupniho portu 0", bl1.getInputPortDataType(0), AbstractPort.DataType.size);
-        Assert.assertEquals("test typu vstupniho portu 1", bl1.getInputPortDataType(1), AbstractPort.DataType.size);
-        Assert.assertEquals("test typu vstupniho portu 2", bl1.getInputPortDataType(2), AbstractPort.DataType.size);
-        Assert.assertEquals("test typu vystupniho portu", bl1.getOutputPortDataType(0), AbstractPort.DataType.surface);
+        Assert.assertEquals("test typu vstupniho portu 0", bl1.getInputPorts().get(0).getDataType(), AbstractPort.DataType.size);
+        Assert.assertEquals("test typu vstupniho portu 1", bl1.getInputPorts().get(1).getDataType(), AbstractPort.DataType.size);
+        Assert.assertEquals("test typu vstupniho portu 2", bl1.getInputPorts().get(2).getDataType(), AbstractPort.DataType.size);
+        Assert.assertEquals("test typu vystupniho portu", bl1.getOutputPorts().get(0).getDataType(), AbstractPort.DataType.surface);
     }
 
     @Test
     public void Test02 (){
-        Assert.assertEquals("test typu vstupniho portu", bl2.getInputPortDataType(0), AbstractPort.DataType.surface);
-        Assert.assertEquals("test typu vystupniho portu", bl2.getOutputPortDataType(0), AbstractPort.DataType.size);
+        Assert.assertEquals("test typu vstupniho portu", bl2.getInputPorts().get(0).getDataType(), AbstractPort.DataType.surface);
+        Assert.assertEquals("test typu vystupniho portu", bl2.getOutputPorts().get(0).getDataType(), AbstractPort.DataType.size);
     }
 
     @Test
     public void Test03 (){
-        bl1.setInputPortData(0,3.0);
-        bl1.setInputPortData(1,4.0);
-        bl1.setInputPortData(2,5.0);
+        bl1.getInputPorts().get(0).setValue(3.0);
+        bl1.getInputPorts().get(1).setValue(4.0);
+        bl1.getInputPorts().get(2).setValue(5.0);
         bl1.calculate();
-        Assert.assertEquals(6.0, bl1.getOutputPortValue(0), 0.1);
+        Assert.assertEquals(6.0, bl1.getOutputPorts().get(0).getValue(), 0.1);
     }
 
     @Test
     public void Test04 () {
-        sch1.connectPorts(bl1, 0,bl2, 0);
-        bl2.setInputPortData(0,4);
-        bl1.setInputPortData(1,3);
-        bl1.setInputPortData(2,4);
+        sch1.connectPorts(bl1.getInputPorts().get(0), bl2.getOutputPorts().get(0));
+        bl2.getInputPorts().get(0).setValue(4.0);
+        bl1.getInputPorts().get(1).setValue(3.0);
+        bl1.getInputPorts().get(2).setValue(4.0);
         Assert.assertTrue("calculate order", sch1.calculateOrder());
         sch1.calculate();
-        Assert.assertEquals(3.0, bl1.getOutputPortValue(0), 0.1);
+        Assert.assertEquals(3.0, bl1.getOutputPorts().get(0).getValue(), 0.1);
     }
 }

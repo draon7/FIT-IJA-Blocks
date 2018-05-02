@@ -4,6 +4,8 @@ import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 
+import java.util.List;
+
 
 public interface IBlock {
     void calculate();
@@ -16,21 +18,9 @@ public interface IBlock {
 
     int getNumberOfOutputPorts();
 
-    AbstractPort.DataType getInputPortDataType(int index);
+    void setInputPortData (InputPort inputPort, double value);
 
-    AbstractPort.DataType getOutputPortDataType(int index);
+    List<InputPort> getInputPorts();
 
-    Double getInputPortValue(int index);
-
-    Double getOutputPortValue(int index);
-
-    void setInputPortData (int index, double value);
-
-    InputPort getInputPort(int index);
-
-    OutputPort getOutputPort(int index);
-
-    void connectToInputPort (IBlock block, int inputPortIndex, int outputPortIndex);
-
-    void connectToOutputPort (IBlock block, int outputPortIndex, int inputPortIndex);
-}
+    List<OutputPort> getOutputPorts();
+    }
