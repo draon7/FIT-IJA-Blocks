@@ -1,6 +1,6 @@
 package ija.ija2017.blok;
 
-import ija.ija2017.port.AbstractPort;
+import ija.ija2017.Data.AbstractData;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 
@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractBlock implements IBlock{
-    private List<InputPort> inputPorts = new ArrayList<>();
-    private List<OutputPort> outputPorts = new ArrayList<>();
+    protected List<InputPort> inputPorts = new ArrayList<>();
+    protected List<OutputPort> outputPorts = new ArrayList<>();
 
     public int getNumberOfInputPorts() {
         return inputPorts.size();
@@ -26,10 +26,6 @@ public abstract class AbstractBlock implements IBlock{
 
     public List<OutputPort> getOutputPorts() {
         return outputPorts;
-    }
-
-    public void setInputPortData(InputPort inputPort, double value) {
-        inputPort.setValue(value);
     }
 
     @Override

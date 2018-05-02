@@ -1,17 +1,17 @@
 package ija.ija2017.port;
 
-public abstract class AbstractPort {
-    public enum DataType {size, angle, surface}
-    DataType dataType;
-    protected java.lang.Double value;
-    protected boolean isReady;
+import ija.ija2017.Data.AbstractData;
 
-    public Double getValue(){
-        return value;
+public abstract class AbstractPort {
+    protected AbstractData data;
+    public boolean isReady;
+
+    public AbstractData getValue(){
+        return data;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setData(AbstractData value) {
+        this.data = value;
     }
 
     public boolean isReady() {
@@ -21,7 +21,9 @@ public abstract class AbstractPort {
         this.isReady = true;
     }
 
-    public DataType getDataType() {
-        return dataType;
+    public AbstractData.DataType getDataType() {
+        return data.dataType;
     }
+
+
 }

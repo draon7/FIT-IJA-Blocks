@@ -1,21 +1,22 @@
 package ija.ija2017.port;
 
+import ija.ija2017.Data.AbstractData;
+
 public class InputPort extends AbstractPort {
     private OutputPort connection;
 
-    public InputPort(DataType dataType, java.lang.Double value) {
-        this.connection = connection;
-        this.dataType = dataType;
-        setValue(value);
+    public InputPort(AbstractData data) {
+        this.connection = null;
+        this.data = data;
     }
     private void updateValue(){
         if (connection != null) {
-            setValue(connection.getValue());
+            setData(connection.getValue());
         }
     }
-    public Double getValue () {
+    public AbstractData getValue () {
         updateValue();
-        return this.value;
+        return this.data;
     }
 
     private void updateReady() {

@@ -1,7 +1,10 @@
 package ija.ija2017.tests;
 
-import ija.ija2017.blok.BlockSquareSize;
-import ija.ija2017.blok.BlockTriangleSurface;
+import ija.ija2017.Data.AbstractData;
+import ija.ija2017.Data.DataAttack;
+import ija.ija2017.Data.DataFighter;
+import ija.ija2017.blok.BlockHealing;
+import ija.ija2017.blok.BlockDefense;
 import ija.ija2017.port.AbstractPort;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,8 +13,8 @@ import ija.ija2017.blok.IBlock;
 import ija.ija2017.scheme.Scheme;
 
 public class projTest {
-    private IBlock bl1;
-    private IBlock bl2;
+    private IBlock blockDefense;
+    private IBlock BlockHealing;
     private Scheme sch1;
 
     public projTest(){
@@ -19,44 +22,41 @@ public class projTest {
 
     @Before
     public void SetUp (){
-        bl1 = new BlockTriangleSurface();
-        bl2 = new BlockSquareSize();
+        blockDefense = new BlockDefense();
+        BlockHealing = new BlockHealing();
         sch1 = new Scheme("test scheme");
-        sch1.addBlock(bl1);
-        sch1.addBlock(bl2);
+        sch1.addBlock(blockDefense);
+        sch1.addBlock(BlockHealing);
     }
 
     @Test
     public void Test01 (){
-        Assert.assertEquals("test typu vstupniho portu 0", bl1.getInputPorts().get(0).getDataType(), AbstractPort.DataType.size);
-        Assert.assertEquals("test typu vstupniho portu 1", bl1.getInputPorts().get(1).getDataType(), AbstractPort.DataType.size);
-        Assert.assertEquals("test typu vstupniho portu 2", bl1.getInputPorts().get(2).getDataType(), AbstractPort.DataType.size);
-        Assert.assertEquals("test typu vystupniho portu", bl1.getOutputPorts().get(0).getDataType(), AbstractPort.DataType.surface);
+        Assert.assertEquals("test typu vstupniho portu 0", blockDefense.getInputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
+        Assert.assertEquals("test typu vstupniho portu 1", blockDefense.getInputPorts().get(1).getDataType(), AbstractData.DataType.attack);
+        Assert.assertEquals("test typu vystupniho portu", blockDefense.getOutputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
     }
 
     @Test
     public void Test02 (){
-        Assert.assertEquals("test typu vstupniho portu", bl2.getInputPorts().get(0).getDataType(), AbstractPort.DataType.surface);
-        Assert.assertEquals("test typu vystupniho portu", bl2.getOutputPorts().get(0).getDataType(), AbstractPort.DataType.size);
+        Assert.assertEquals("test typu vstupniho portu", BlockHealing.getInputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
+        Assert.assertEquals("test typu vystupniho portu", BlockHealing.getOutputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
     }
 
     @Test
     public void Test03 (){
-        bl1.getInputPorts().get(0).setValue(3.0);
-        bl1.getInputPorts().get(1).setValue(4.0);
-        bl1.getInputPorts().get(2).setValue(5.0);
-        bl1.calculate();
-        Assert.assertEquals(6.0, bl1.getOutputPorts().get(0).getValue(), 0.1);
+        blockDefense.getInputPorts().get(0).setData(new DataFighter(200.0, 10.0, 10.0,10.0));
+        blockDefense.getInputPorts().get(1).setData(new DataAttack(100.0));
+        blockDefense.calculate();
+        Assert.assertEquals(100.0, ((DataFighter)blockDefense.getOutputPorts().get(0).getValue()).Health, 0.1);
     }
 
     @Test
     public void Test04 () {
-        sch1.connectPorts(bl1.getInputPorts().get(0), bl2.getOutputPorts().get(0));
-        bl2.getInputPorts().get(0).setValue(4.0);
-        bl1.getInputPorts().get(1).setValue(3.0);
-        bl1.getInputPorts().get(2).setValue(4.0);
+        sch1.connectPorts(blockDefense.getInputPorts().get(0), BlockHealing.getOutputPorts().get(0));
+        BlockHealing.getInputPorts().get(0).setData(new DataFighter(200.0,10.0,10.0,10.0));
+        blockDefense.getInputPorts().get(1).setData(new DataAttack(100.0));
         Assert.assertTrue("calculate order", sch1.calculateOrder());
         sch1.calculate();
-        Assert.assertEquals(3.0, bl1.getOutputPorts().get(0).getValue(), 0.1);
+        Assert.assertEquals(140.0, ((DataFighter)blockDefense.getOutputPorts().get(0).getValue()).Health, 0.1);
     }
 }

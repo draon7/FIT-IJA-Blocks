@@ -18,8 +18,6 @@ public interface IBlock {
 
     int getNumberOfOutputPorts();
 
-    void setInputPortData (InputPort inputPort, double value);
-
     List<InputPort> getInputPorts();
 
     List<OutputPort> getOutputPorts();
