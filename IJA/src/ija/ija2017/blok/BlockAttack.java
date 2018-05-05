@@ -60,11 +60,11 @@ public class BlockAttack extends AbstractBlockUI {
         weapon.setReady();
     }
 
-
+/*
     double mouseX;
-    double mouseY;
+    double mouseY;*/
 
-    public void createUI(Pane pane){
+    /*public void createUI(Pane pane){
         Group block = (Group) BlockCreateUi.CreateBlockAttackUI();
         pane.getChildren().add(block);
 
@@ -91,7 +91,7 @@ public class BlockAttack extends AbstractBlockUI {
         });
 
         return;
-    }
+    }*/
 
 
 }
