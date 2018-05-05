@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #464646;" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija.ija2017.ui.MainWindowController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" text="New scheme" />
+                        <MenuItem mnemonicParsing="false" text="Save scheme" />
+                    <MenuItem mnemonicParsing="false" text="Open scheme" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox style="-fx-background-color: #404040;">
+                     <children>
+                        <VBox maxHeight="400.0" minHeight="400.0" prefHeight="400.0" prefWidth="100.0" style="-fx-background-color: #404040;">
+                           <children>
+                              <Pane fx:id="blockAttackButton" onMouseClicked="#createBlockAttack" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="83.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Attack" textFill="WHITE" />
+                                 </children></Pane>
+                              <Rectangle fill="#3d3d3d" height="2.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
+                              <Pane layoutX="10.0" layoutY="10.0" onMouseClicked="#createBlockDefense" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="79.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Defense" textFill="WHITE" />
+                                 </children></Pane>
+                              <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="84.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
+                              <Pane layoutX="10.0" layoutY="198.0" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="80.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" onMouseClicked="#createBlockHealing" text="Healing" textFill="WHITE" />
+                                 </children></Pane>
+                              <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="160.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
+                              <Pane layoutX="10.0" layoutY="260.0" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="78.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" onMouseClicked="#createBlockTraining" text="Training" textFill="WHITE" />
+                                 </children></Pane>
+                              <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="236.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
+                              <Pane layoutX="10.0" layoutY="292.0" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="53.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" onMouseClicked="#createBlockWeaponUpgrade" text="Weapon Upgrade" textFill="WHITE" />
+                                 </children></Pane>
+                              <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="309.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox fx:id="mainView" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <AnchorPane fx:id="mainViewPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children></VBox>
+               </children>
+            </HBox>
+         </children></VBox>
+   </children>
+</AnchorPane>

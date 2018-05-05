@@ -3,6 +3,7 @@ package ija.ija2017.blok;
 import ija.ija2017.Data.AbstractData;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,4 +43,6 @@ public abstract class AbstractBlock implements IBlock{
 
         return Objects.hash(inputPorts, outputPorts);
     }
+
+    public abstract void createUI(Pane pane);
 }

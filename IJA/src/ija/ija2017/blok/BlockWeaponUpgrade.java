@@ -5,6 +5,7 @@ import ija.ija2017.Data.DataFighter;
 import ija.ija2017.Data.DataWeapon;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
+import javafx.scene.layout.Pane;
 
 public class BlockWeaponUpgrade extends AbstractBlock {
     private InputPort fighter = new InputPort(new DataFighter());
@@ -42,4 +43,6 @@ public class BlockWeaponUpgrade extends AbstractBlock {
         fighter.setReady();
         weaponUpgraded.setReady();
     }
+
+    public void createUI(Pane pane){}
 }
