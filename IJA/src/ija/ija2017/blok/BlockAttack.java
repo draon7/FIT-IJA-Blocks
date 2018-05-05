@@ -5,6 +5,15 @@ import ija.ija2017.Data.DataAttack;
 import ija.ija2017.Data.DataWeapon;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
+import ija.ija2017.ui.BlockCreateUi;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+
 
 
 public class BlockAttack extends AbstractBlock {
@@ -50,4 +59,39 @@ public class BlockAttack extends AbstractBlock {
         fighter.setReady();
         weapon.setReady();
     }
+
+
+    double mouseX;
+    double mouseY;
+
+    public void createUI(Pane pane){
+        Group block = (Group) BlockCreateUi.CreateBlockAttackUI();
+        pane.getChildren().add(block);
+
+        block.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mouseX = event.getSceneX();
+                mouseY = event.getSceneY();
+            }
+        });
+        block.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                double deltaX = event.getSceneX()-mouseX+block.getLayoutBounds().getMinX();
+                double deltaY = event.getSceneY()-mouseY;
+                double newX = deltaX + block.getLayoutX();
+                double newY = deltaY + block.getLayoutY();
+
+                System.out.println("Relocate X : Y -> " + newX + " : " + newY);
+                block.relocate(newX, newY);
+                mouseX = event.getSceneX();
+                mouseY = event.getSceneY();
+            }
+        });
+
+        return;
+    }
+
+
 }

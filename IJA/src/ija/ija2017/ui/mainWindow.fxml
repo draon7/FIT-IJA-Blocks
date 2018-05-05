@@ -41,36 +41,39 @@
                      <children>
                         <VBox maxHeight="400.0" minHeight="400.0" prefHeight="400.0" prefWidth="100.0" style="-fx-background-color: #404040;">
                            <children>
-                              <Pane prefHeight="200.0" prefWidth="200.0">
+                              <Pane fx:id="blockAttackButton" onMouseClicked="#createBlockAttack" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label alignment="CENTER" layoutX="86.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Label" textFill="WHITE" />
+                                    <Label alignment="CENTER" layoutX="83.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Attack" textFill="WHITE" />
                                  </children></Pane>
                               <Rectangle fill="#3d3d3d" height="2.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
-                              <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+                              <Pane layoutX="10.0" layoutY="10.0" onMouseClicked="#createBlockDefense" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label alignment="CENTER" layoutX="86.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Label" textFill="WHITE" />
+                                    <Label alignment="CENTER" layoutX="79.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Defense" textFill="WHITE" />
                                  </children></Pane>
                               <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="84.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
                               <Pane layoutX="10.0" layoutY="198.0" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label alignment="CENTER" layoutX="86.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Label" textFill="WHITE" />
+                                    <Label alignment="CENTER" layoutX="80.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" onMouseClicked="#createBlockHealing" text="Healing" textFill="WHITE" />
                                  </children></Pane>
                               <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="160.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
                               <Pane layoutX="10.0" layoutY="260.0" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label alignment="CENTER" layoutX="86.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Label" textFill="WHITE" />
+                                    <Label alignment="CENTER" layoutX="78.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" onMouseClicked="#createBlockTraining" text="Training" textFill="WHITE" />
                                  </children></Pane>
                               <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="236.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
                               <Pane layoutX="10.0" layoutY="292.0" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label alignment="CENTER" layoutX="87.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" text="Label" textFill="WHITE" />
+                                    <Label alignment="CENTER" layoutX="53.0" layoutY="31.0" maxHeight="500.0" maxWidth="500.0" onMouseClicked="#createBlockWeaponUpgrade" text="Weapon Upgrade" textFill="WHITE" />
                                  </children></Pane>
                               <Rectangle fill="#3d3d3d" height="2.0" layoutX="10.0" layoutY="309.0" stroke="#3d3d3d" strokeType="INSIDE" width="200.0" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+                  <VBox fx:id="mainView" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <AnchorPane fx:id="mainViewPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children></VBox>
                </children>
             </HBox>
          </children></VBox>

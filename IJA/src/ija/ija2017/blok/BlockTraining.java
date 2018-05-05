@@ -3,6 +3,7 @@ package ija.ija2017.blok;
 import ija.ija2017.Data.DataFighter;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
+import javafx.scene.layout.Pane;
 
 public class BlockTraining extends AbstractBlock {
     private InputPort fighter = new InputPort(new DataFighter());
@@ -29,6 +30,8 @@ public class BlockTraining extends AbstractBlock {
     public void setReady() {
         fighterTrained.setReady();
     }
+
+    public void createUI(Pane pane){}
 
 
 }
