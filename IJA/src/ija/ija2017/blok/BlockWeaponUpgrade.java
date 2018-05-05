@@ -7,7 +7,7 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
-public class BlockWeaponUpgrade extends AbstractBlock {
+public class BlockWeaponUpgrade extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort weapon = new InputPort(new DataWeapon());
     private OutputPort fighterOutput = new OutputPort(new DataFighter());

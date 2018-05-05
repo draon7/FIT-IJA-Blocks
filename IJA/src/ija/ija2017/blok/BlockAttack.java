@@ -16,7 +16,7 @@ import javafx.scene.shape.Rectangle;
 
 
 
-public class BlockAttack extends AbstractBlock {
+public class BlockAttack extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort weapon = new InputPort(new DataWeapon());
     private OutputPort attack = new OutputPort(new DataAttack());

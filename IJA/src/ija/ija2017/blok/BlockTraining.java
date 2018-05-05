@@ -5,7 +5,7 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
-public class BlockTraining extends AbstractBlock {
+public class BlockTraining extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private OutputPort fighterTrained = new OutputPort(new DataFighter());
 

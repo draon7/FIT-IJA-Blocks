@@ -6,7 +6,7 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
-public class BlockDefense extends AbstractBlock {
+public class BlockDefense extends AbstractBlockUI {
 
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort attack = new InputPort(new DataAttack());

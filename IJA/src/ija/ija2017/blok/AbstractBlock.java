@@ -43,6 +43,4 @@ public abstract class AbstractBlock implements IBlock{
 
         return Objects.hash(inputPorts, outputPorts);
     }
-
-    public abstract void createUI(Pane pane);
 }

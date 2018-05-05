@@ -5,7 +5,7 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
-public class BlockHealing extends AbstractBlock {
+public class BlockHealing extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private OutputPort fighterHealed = new OutputPort(new DataFighter());
 
