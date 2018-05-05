@@ -21,7 +21,7 @@ public class Scheme {
     }
 
     public boolean calculateOrder () {
-        boolean found = true;
+        boolean found;
         while (blockList.size() != orderBlockList.size()) {
             found = false;
             for (IBlock block : blockList) {
