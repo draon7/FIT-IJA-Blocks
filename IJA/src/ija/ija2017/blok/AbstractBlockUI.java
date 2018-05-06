@@ -15,6 +15,11 @@ public abstract class AbstractBlockUI extends AbstractBlock {
     private Group block;
     private Pane parent;
 
+    public Pane getParent() {return parent;}
+    public void setParent(Pane parent) {this.parent = parent;}
+
+
+
     public ArrayList<Circle> getPortList() {
         return portList;
     }

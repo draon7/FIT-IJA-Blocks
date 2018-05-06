@@ -1,5 +1,6 @@
 package ija.ija2017.ui;
 
+import ija.ija2017.blok.AbstractBlock;
 import ija.ija2017.blok.AbstractBlockUI;
 import ija.ija2017.blok.BlockHealing;
 import ija.ija2017.port.AbstractPort;
@@ -94,13 +95,25 @@ public class BlockConectionHandling {
 
     private static boolean tryConnect(){
         if(inputPort != null && outputPort != null){
-            if(inputPort.getConnection() != null){}
-            if(outputPort.getConnection() != null){}
+            if(inputPort.getConnection() != null){activeScheme.disconnectPort(inputPort);}
+            if(outputPort.getConnection() != null){activeScheme.disconnectPort(outputPort);}
             activeScheme.connectPorts(inputPort, outputPort);
             removeInput();
             removeOutput();
             return true;
         }
         return false;
+    }
+    public static void disconnect(AbstractPort port) {
+        if (port instanceof OutputPort) {
+            if (((OutputPort) port).getConnection() != null) {
+                activeScheme.disconnectPort(port);
+            }
+        }
+        if (port instanceof InputPort) {
+            if (((InputPort) port).getConnection() != null) {
+                activeScheme.disconnectPort(port);
+            }
+        }
     }
 }

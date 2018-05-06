@@ -103,16 +103,20 @@ public class Scheme {
      */
     public void disconnectPort (AbstractPort port){
         if (port instanceof InputPort) {
+            port.getPath().getElements().clear();
             OutputPort outputPort = ((InputPort) port).getConnection();
             if (outputPort == null)
                 return;
+            outputPort.getPath().getElements().clear();
             outputPort.setConnection(null);
             ((InputPort) port).setConnection(null);
         }
         else {
             InputPort inputPort = ((OutputPort)port).getConnection();
+            port.getPath().getElements().clear();
             if (inputPort == null)
                 return;
+            inputPort.getPath().getElements().clear();
             inputPort.setConnection(null);
             ((OutputPort) port).setConnection(null);
         }

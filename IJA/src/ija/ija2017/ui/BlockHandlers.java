@@ -6,6 +6,7 @@ import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.Group;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -20,6 +21,21 @@ public class BlockHandlers {
     private final static Color circleColor = Color.ORANGE;
     private final static Color circleHoverColor = Color.LIGHTYELLOW;
 
+    static void addMoveRemoveHandles(AbstractBlockUI blockRef){
+        blockRef.getBlock().getChildren().get(0).setOnMousePressed(event -> {
+            if(event.getButton() == MouseButton.SECONDARY){
+                for(AbstractPort port : blockRef.getInputPorts())    {BlockConectionHandling.disconnect(port);}
+                for(AbstractPort port : blockRef.getOutputPorts())   {BlockConectionHandling.disconnect(port);}
+                blockRef.getParent().getChildren().remove(blockRef.getBlock());
+                for(Path path : blockRef.getPortPathList()){blockRef.getParent().getChildren().remove(path);}
+            }
+            BlockHandlers.handleMoveStart(event, blockRef);
+        });
+        blockRef.getBlock().getChildren().get(0).setOnMouseDragged(event -> {
+            BlockHandlers.handleMoveDrag(event, blockRef, blockRef.getPortPathList());
+        });
+    }
+
     static void handleMoveStart(MouseEvent e, AbstractBlockUI blockReference){
         blockReference.setPositionX(e.getSceneX());
         blockReference.setPositionY(e.getSceneY());
@@ -31,7 +47,7 @@ public class BlockHandlers {
         double deltaX = e.getSceneX() - blockReference.getPositionX();
         double deltaY = e.getSceneY() - blockReference.getPositionY();
         double newX = deltaX + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX();
-        double newY = deltaY + blockReference.getBlock().getLayoutY();
+        double newY = deltaY + blockReference.getBlock().getLayoutBounds().getMinY() + blockReference.getBlock().getLayoutY();
 
         for (InputPort inPort : inputPorts){
             OutputPort outPort = inPort.getConnection();
@@ -77,14 +93,18 @@ public class BlockHandlers {
         });
     }
     static void handlePortClicked(MouseEvent e, AbstractPort port, Circle circle, Path path, int numberOfPorts, int portIndex){
-        System.out.println("MousePressed");
-
-        if(port instanceof InputPort)   {if(((InputPort)port).getConnection() != null)  {
-            System.out.println(((InputPort)port).getConnection());
-            ((InputPort)port).getConnection().getPath().getElements().clear();}}
-        else if(port instanceof OutputPort)  {if(((OutputPort)port).getConnection() != null) {
-            System.out.println(((OutputPort)port).getConnection());
-            ((OutputPort)port).getConnection().getPath().getElements().clear();}}
+        if(port instanceof InputPort)   {
+            if(((InputPort)port).getConnection() != null)  {
+                //port.getPath().getElements().clear();
+                BlockConectionHandling.disconnect(port);
+            }
+        }
+        else if(port instanceof OutputPort){
+            if(((OutputPort)port).getConnection() != null) {
+                //port.getPath().getElements().clear();
+                BlockConectionHandling.disconnect(port);
+            }
+        }
         // TODO: 06.05.2018 Disconnect
 
         path.setMouseTransparent(true);
