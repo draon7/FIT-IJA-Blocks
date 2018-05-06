@@ -43,6 +43,16 @@ public class BlockHandlers {
         });
     }
     static void handlePortClicked(MouseEvent e, AbstractPort port, Circle circle, Path path, int numberOfPorts, int portIndex){
+        System.out.println("MousePressed");
+
+        if(port instanceof InputPort)   {if(((InputPort)port).getConnection() != null)  {
+            System.out.println(((InputPort)port).getConnection());
+            ((InputPort)port).getConnection().getPath().getElements().clear();}}
+        else if(port instanceof OutputPort)  {if(((OutputPort)port).getConnection() != null) {
+            System.out.println(((OutputPort)port).getConnection());
+            ((OutputPort)port).getConnection().getPath().getElements().clear();}}
+        // TODO: 06.05.2018 Disconnect
+
         path.setMouseTransparent(true);
         path.getElements().clear();
         MoveTo start = new MoveTo();
@@ -61,13 +71,13 @@ public class BlockHandlers {
 
         circle.setFill(circleHoverColor);
 
-        if      (port instanceof InputPort) {BlockConectionHandling.setInput((InputPort) port);}
-        else if (port instanceof OutputPort){BlockConectionHandling.setOutput((OutputPort) port);}
+        //if      (port instanceof InputPort) {BlockConectionHandling.setInput((InputPort) port);}
+        //else if (port instanceof OutputPort){BlockConectionHandling.setOutput((OutputPort) port);}
     }
     static void hanlePortReleased(AbstractPort port, Circle circle,Path path) {
         path.setMouseTransparent(false);
         path.toBack();
-        path.setStroke(Color.BLACK);
+        path.setStroke(strokeColor);
 
         circle.setFill(circleColor);
 
@@ -95,8 +105,7 @@ public class BlockHandlers {
     }
     static void hanlePortDragged(MouseEvent e, AbstractBlockUI blockReference, Path path){
         if(path.getElements().size() < 2){System.out.println("No elements in path");return;} //Prevent NullPointer Errors
-        System.out.println(path);
-        path.setStroke(Color.YELLOW);
+        path.setStroke(strokeHoverColor);
         path.toFront();
         double currentX = e.getX()+blockReference.getBlock().getLayoutX();
         double currentY = e.getY()+blockReference.getBlock().getLayoutY();
@@ -113,39 +122,6 @@ public class BlockHandlers {
             ((CubicCurveTo)path.getElements().get(1)).setControlX2(currentX + (currentX - blockReference.getBlock().getLayoutX()));
 
             double deltaY = (blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3)) - currentY;
-            System.out.println(deltaY);
-            if(currentY < (blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3))){
-                if(deltaY < 75){deltaY = 75;}
-                ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY() + (blockReference.getBlock().getLayoutBounds().getMaxY()*1/3) - deltaY);
-                ((CubicCurveTo)path.getElements().get(1)).setControlY2(currentY - deltaY);
-            }else{
-                if(deltaY > -75){deltaY = -75;}
-                ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY() + (blockReference.getBlock().getLayoutBounds().getMaxY()*1/3) - deltaY);
-                ((CubicCurveTo)path.getElements().get(1)).setControlY2(currentY - deltaY);
-            }
-        }
-    }
-    static void hanlePortDragged2(MouseEvent e, AbstractBlockUI blockReference, Path path, AbstractPort port){
-        path = port.getPath();
-        if(path.getElements().size() < 2){return;} //Prevent NullPointer Errors
-        path.setStroke(Color.YELLOW);
-        path.toFront();
-        double currentX = e.getX()+blockReference.getBlock().getLayoutX();
-        double currentY = e.getY()+blockReference.getBlock().getLayoutY();
-        ((CubicCurveTo)path.getElements().get(1)).setX(currentX);
-        ((CubicCurveTo)path.getElements().get(1)).setY(currentY);
-        if(currentX < blockReference.getBlock().getLayoutX()){
-            ((CubicCurveTo)path.getElements().get(1)).setControlX1(currentX - (currentX - blockReference.getBlock().getLayoutX())/2);
-            ((CubicCurveTo)path.getElements().get(1)).setControlX2(currentX - (currentX - blockReference.getBlock().getLayoutX())/2);
-            ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3));
-            ((CubicCurveTo)path.getElements().get(1)).setControlY2(currentY);
-
-        }else{
-            ((CubicCurveTo)path.getElements().get(1)).setControlX1(blockReference.getBlock().getLayoutX() - (currentX - blockReference.getBlock().getLayoutX()));
-            ((CubicCurveTo)path.getElements().get(1)).setControlX2(currentX + (currentX - blockReference.getBlock().getLayoutX()));
-
-            double deltaY = (blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3)) - currentY;
-            System.out.println(deltaY);
             if(currentY < (blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3))){
                 if(deltaY < 75){deltaY = 75;}
                 ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY() + (blockReference.getBlock().getLayoutBounds().getMaxY()*1/3) - deltaY);

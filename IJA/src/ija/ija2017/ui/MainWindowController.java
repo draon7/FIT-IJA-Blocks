@@ -11,13 +11,20 @@ import javafx.scene.layout.AnchorPane;
 
 public class MainWindowController {
 
-    public MainWindowController(){
-        BlockConectionHandling.setMainView(mainViewPane);
-    }
 
     @FXML private AnchorPane mainViewPane;
     @FXML private TabPane tabPane;
     @FXML private Tab addScheme;
+
+    private boolean initialized = false;
+    private void setInitialized(boolean value){initialized = value;}
+
+    @FXML
+    public void initialize(){
+        BlockConectionHandling.setMainView(mainViewPane);
+        addTab(null, 1);
+        setInitialized(true);
+    }
 
     @FXML
     protected void createBlockAttack(MouseEvent e){
@@ -46,25 +53,32 @@ public class MainWindowController {
     }
     @FXML
     protected void changeScheme(){
+        if (initialized == false) {return;}
         int index = 0;
         if(tabPane.getSelectionModel().getSelectedItem().isSelected()){
+            System.out.println("Selected tab: " + tabPane.getSelectionModel().getSelectedItem().getText());
             index = tabPane.getSelectionModel().getSelectedIndex();
             BlockConectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
         }
-        else return;
+        else {return;}
         if(tabPane.getTabs().indexOf(addScheme) == index){
             index += 1;
-            Tab tab = new Tab("newScheme" + index);
-            tab.setOnSelectionChanged(new EventHandler<Event>() {
-                @Override
-                public void handle(Event event) {
-                    changeScheme();
-                }
-            });
-            tabPane.getTabs().add(tab);
-            tabPane.getTabs().remove(addScheme);
-            tabPane.getTabs().add(addScheme);
-            BlockConectionHandling.addScheme(tab.getText());
+            addTab(null, index);
         }
+    }
+
+    private void addTab(String s, int index){
+        if(s == "" || s == null){s = "newScheme";}
+        Tab tab = new Tab(s + index);
+        tab.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                changeScheme();
+            }
+        });
+        BlockConectionHandling.addScheme(tab.getText());
+        tabPane.getTabs().add(tab);
+        tabPane.getTabs().remove(addScheme);
+        tabPane.getTabs().add(addScheme);
     }
 }

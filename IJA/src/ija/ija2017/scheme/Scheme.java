@@ -3,8 +3,9 @@ package ija.ija2017.scheme;
 import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,9 @@ import java.util.List;
 public class Scheme {
 
     public Scheme (String name) {
-        setView(new AnchorPane());
+        AnchorPane pane = new AnchorPane();
+        pane.setBackground(new Background(new BackgroundFill(Color.color(0.30,0.30,0.30,1), CornerRadii.EMPTY, Insets.EMPTY)));
+        setView(pane);
         this.name = name;
     }
 

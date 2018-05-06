@@ -32,4 +32,5 @@ public class InputPort extends AbstractPort {
     public void setConnection(OutputPort connection) {
         this.connection = connection;
     }
+    public OutputPort getConnection() {return this.connection;}
 }
