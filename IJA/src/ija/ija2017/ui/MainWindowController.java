@@ -68,9 +68,9 @@ public class MainWindowController {
     }
     @FXML
     protected void calculateScheme(){
-        if(BlockConectionHandling.runScheme()){
-            startButton.setTextFill(Color.color(0.8,0.8,0.8,0));
-            stepButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+        if(BlockConectionHandling.calculateScheme()){
+            startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
+            stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
         }else{
             startButton.setTextFill(Color.RED);
             stepButton.setTextFill(Color.RED);
@@ -79,8 +79,8 @@ public class MainWindowController {
     @FXML
     protected void runScheme(){
         if(BlockConectionHandling.runScheme()){
-            startButton.setTextFill(Color.color(0.8,0.8,0.8,0));
-            stepButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+            startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
+            stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
         }else{
             startButton.setTextFill(Color.RED);
             stepButton.setTextFill(Color.RED);
@@ -89,8 +89,8 @@ public class MainWindowController {
     @FXML
     protected void stepScheme(){
         if(BlockConectionHandling.stepScheme()) {
-            startButton.setTextFill(Color.color(0.8,0.8,0.8,0));
-            stepButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+            startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
+            stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
         }else{
             startButton.setTextFill(Color.RED);
             stepButton.setTextFill(Color.RED);

@@ -1,16 +1,30 @@
 package ija.ija2017.ui;
 
+import ija.ija2017.Data.AbstractData;
 import ija.ija2017.blok.AbstractBlock;
 import ija.ija2017.blok.AbstractBlockUI;
 import ija.ija2017.blok.BlockHealing;
+import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import ija.ija2017.scheme.Scheme;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
+import ija.ija2017.Data.AbstractData.DataType;
 
 public class BlockConectionHandling {
     private static BlockConectionHandling self = new BlockConectionHandling();
@@ -83,6 +97,37 @@ public class BlockConectionHandling {
     }
 
     public static boolean calculateScheme(){
+        TextInputDialog dialog = new TextInputDialog("Val");
+        dialog.setTitle("Wee");
+        dialog.setHeaderText("Wee Header Wee");
+        dialog.showAndWait();
+
+        for(IBlock block : activeScheme.getBlockList()){
+            for(InputPort inputPort : block.getInputPorts()){
+                if(inputPort.getConnection() == null){
+                    switch(inputPort.getDataType()){
+                        case attack:{
+                            dialog.setContentText("Attack: ");
+                            Optional<String> result = dialog.showAndWait();
+                            System.out.println(result);
+                            break;
+                        }
+                        case fighter:{
+                            dialog.setContentText("Fighter: ");
+                            Optional<String> result = dialog.showAndWait();
+                            System.out.println(result);
+                            break;
+                        }
+                        case weapon:{
+                            dialog.setContentText("Weapon: ");
+                            Optional<String> result = dialog.showAndWait();
+                            System.out.println(result);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         if(activeScheme.calculateOrder()) {
             calculated = true;
             return true;

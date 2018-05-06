@@ -17,8 +17,12 @@ import java.util.List;
  */
 public class Scheme {
     private String name;
+
     private List<IBlock> blockList = new ArrayList<IBlock>();
     private List<IBlock> orderBlockList = new ArrayList<IBlock>();
+
+    public List<IBlock> getBlockList() {return blockList;}
+    public void setBlockList(List<IBlock> blockList) {this.blockList = blockList;}
 
     /**
      * Constructor sets name of scheme
