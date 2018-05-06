@@ -85,6 +85,7 @@ public class BlockConectionHandling {
         getSchemes().add(newScheme);
         changeScheme(id);
     }
+
     public static void changeScheme(String id){
         for (Scheme scheme : getSchemes()) {
             if(scheme.getName() == id){
