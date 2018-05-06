@@ -1,6 +1,7 @@
 package ija.ija2017.scheme;
 
 import ija.ija2017.blok.IBlock;
+import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.AnchorPane;
@@ -92,6 +93,28 @@ public class Scheme {
         outputPort.setConnection(inputPort);
         inputPort.setConnection(outputPort);
     }
+
+    /**
+     * Method disconnect port
+     * @param port port to disconnect
+     */
+    public void disconnectPort (AbstractPort port){
+        if (port instanceof InputPort) {
+            OutputPort outputPort = ((InputPort) port).getConnection();
+            if (outputPort == null)
+                return;
+            outputPort.setConnection(null);
+            ((InputPort) port).setConnection(null);
+        }
+        else {
+            InputPort inputPort = ((OutputPort)port).getConnection();
+            if (inputPort == null)
+                return;
+            inputPort.setConnection(null);
+            ((OutputPort) port).setConnection(null);
+        }
+    }
+
 
     /**
      * gets name of the scheme

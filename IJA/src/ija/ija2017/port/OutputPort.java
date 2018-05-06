@@ -18,10 +18,18 @@ public class OutputPort extends AbstractPort {
     }
 
     /**
-     * Sets connection to given OutputPort
+     * Method sets connection to given OutputPort
      * @param connection OutputPort to connect with
      */
     public void setConnection(InputPort connection) {
         this.connection = connection;
+    }
+
+    /**
+     * Method gets InputPort connected to
+     * @return connected InputPort
+     */
+    public InputPort getConnection() {
+        return connection;
     }
 }

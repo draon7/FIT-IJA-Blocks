@@ -61,4 +61,12 @@ public class InputPort extends AbstractPort {
     public void setConnection(OutputPort connection) {
         this.connection = connection;
     }
+
+    /**
+     * Method gets connection
+     * @return OutputPort connected to
+     */
+    public OutputPort getConnection() {
+        return connection;
+    }
 }
