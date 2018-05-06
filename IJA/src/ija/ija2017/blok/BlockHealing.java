@@ -5,10 +5,16 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
+/**
+ * This Block Is impementation of AbstractBlockUI reassembling healing of the fighter.
+ */
 public class BlockHealing extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private OutputPort fighterHealed = new OutputPort(new DataFighter());
 
+    /**
+     * constructor initialize inputPorts and outputPorts
+     */
     public BlockHealing() {
         inputPorts.add(fighter);
         outputPorts.add(fighterHealed);

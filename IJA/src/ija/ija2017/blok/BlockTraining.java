@@ -4,11 +4,16 @@ import ija.ija2017.Data.DataFighter;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
-
+/**
+ * This Block Is impementation of AbstractBlockUI reassembling training fighter.
+ */
 public class BlockTraining extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private OutputPort fighterTrained = new OutputPort(new DataFighter());
 
+    /**
+     * constructor initialize inputPorts and outputPorts
+     */
     public BlockTraining() {
         inputPorts.add(fighter);
         outputPorts.add(fighterTrained);
