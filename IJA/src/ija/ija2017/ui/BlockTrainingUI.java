@@ -34,7 +34,7 @@ public class BlockTrainingUI extends BlockTraining implements BlockUI {
     }
 
     public void CreateBlockUI(){
-        block = BlockCreateUi.CreateBlockTrainingUI();
+        block = BlockCreateUI.CreateBlockTrainingUI();
         AddHandlers(block);
         parent.getChildren().add(block);
 

@@ -34,7 +34,7 @@ public class BlockDefenseUI extends BlockDefense implements BlockUI {
     }
 
     public void CreateBlockUI(){
-        block = BlockCreateUi.CreateBlockDefenseUI();
+        block = BlockCreateUI.CreateBlockDefenseUI();
         AddHandlers(block);
         parent.getChildren().add(block);
 

@@ -5,8 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-public final class BlockCreateUi {
-    private BlockCreateUi(){}
+public final class BlockCreateUI {
+    private BlockCreateUI(){}
 
     public static Group CreateBlockAttackUI(){
         System.out.println("Creating BlockAttack UI");

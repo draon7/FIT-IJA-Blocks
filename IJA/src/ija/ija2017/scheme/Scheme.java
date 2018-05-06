@@ -3,18 +3,27 @@ package ija.ija2017.scheme;
 import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scheme {
+
+    public Scheme (String name) {
+        setView(new AnchorPane());
+        this.name = name;
+    }
+
     private String name;
     private List<IBlock> blockList = new ArrayList<IBlock>();
     private List<IBlock> orderBlockList = new ArrayList<IBlock>();
 
-    public Scheme (String name) {
-        this.name = name;
-    }
+    private Pane view;
+
+    public Pane getView() {return view;}
+    public void setView(Pane view) {this.view = view;}
 
     public void addBlock (IBlock block) {
         blockList.add(block);

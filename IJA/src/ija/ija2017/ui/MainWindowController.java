@@ -21,23 +21,28 @@ public class MainWindowController {
 
     @FXML
     protected void createBlockAttack(MouseEvent e){
-        BlockAttackUI blockAttack = new BlockAttackUI(mainViewPane);
+        BlockConectionHandling.createBlock("attack");
+        //BlockAttackUI blockAttack = new BlockAttackUI(mainViewPane);
     }
     @FXML
     protected void createBlockDefense(MouseEvent e){
-        BlockDefenseUI blockDefense = new BlockDefenseUI(mainViewPane);
+        BlockConectionHandling.createBlock("defense");
+        //BlockDefenseUI blockDefense = new BlockDefenseUI(mainViewPane);
     }
     @FXML
     protected void createBlockHealing(MouseEvent e){
-        BlockHealingUI blockHealing = new BlockHealingUI(mainViewPane);
+        BlockConectionHandling.createBlock("healing");
+        //BlockHealingUI blockHealing = new BlockHealingUI(mainViewPane);
     }
     @FXML
     protected void createBlockTraining(MouseEvent e){
-        BlockTrainingUI blockTraining = new BlockTrainingUI(mainViewPane);
+        BlockConectionHandling.createBlock("training");
+        //BlockTrainingUI blockTraining = new BlockTrainingUI(mainViewPane);
     }
     @FXML
     protected void createBlockWeaponUpgrade(MouseEvent e){
-        BlockWeaponUpgradeUI blockWeaponUpgrade = new BlockWeaponUpgradeUI(mainViewPane);
+        BlockConectionHandling.createBlock("upgrade");
+        //BlockWeaponUpgradeUI blockWeaponUpgrade = new BlockWeaponUpgradeUI(mainViewPane);
     }
     @FXML
     protected void changeScheme(){
@@ -46,6 +51,7 @@ public class MainWindowController {
             index = tabPane.getSelectionModel().getSelectedIndex();
             BlockConectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
         }
+        else return;
         if(tabPane.getTabs().indexOf(addScheme) == index){
             index += 1;
             Tab tab = new Tab("newScheme" + index);

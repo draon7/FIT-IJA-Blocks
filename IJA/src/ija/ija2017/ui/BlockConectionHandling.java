@@ -1,10 +1,13 @@
 package ija.ija2017.ui;
 
+import ija.ija2017.blok.AbstractBlockUI;
+import ija.ija2017.blok.BlockHealing;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import ija.ija2017.scheme.Scheme;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 
@@ -27,6 +30,32 @@ public class BlockConectionHandling {
 
     private static InputPort inputPort;
     private static OutputPort outputPort;
+
+    public static void createBlock(String s){
+        switch (s){
+            case("attack"):{
+                new BlockAttackUI(activeScheme.getView());
+                break;
+            }
+            case("defense"):{
+                new BlockDefenseUI(activeScheme.getView());
+                break;
+            }
+            case("healing"):{
+                new BlockHealingUI(activeScheme.getView());
+                break;
+            }
+            case("training"):{
+                new BlockTrainingUI(activeScheme.getView());
+                break;
+            }
+            case("upgrade"):{
+                new BlockWeaponUpgradeUI(activeScheme.getView());
+                break;
+            }
+        }
+
+    }
 
     public static void addScheme(String id){
         getSchemes().add(new Scheme(id));
