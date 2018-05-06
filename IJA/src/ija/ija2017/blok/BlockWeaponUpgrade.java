@@ -7,12 +7,18 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
+/**
+ * This Block Is impementation of AbstractBlockUI reassembling upgrade of weapon.
+ */
 public class BlockWeaponUpgrade extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort weapon = new InputPort(new DataWeapon());
     private OutputPort fighterOutput = new OutputPort(new DataFighter());
     private OutputPort weaponUpgraded = new OutputPort(new DataAttack());
 
+    /**
+     * constructor initialize inputPorts and outputPorts
+     */
     public BlockWeaponUpgrade() {
         inputPorts.add(fighter);
         inputPorts.add(weapon);

@@ -7,19 +7,36 @@ import ija.ija2017.port.OutputPort;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class is reassembling schemes showed on ui it implements
+ * calculation methods and connection of blocks
+ */
 public class Scheme {
     private String name;
     private List<IBlock> blockList = new ArrayList<IBlock>();
     private List<IBlock> orderBlockList = new ArrayList<IBlock>();
 
+    /**
+     * Constructor sets name of scheme
+     * @param name name of the scheme
+     */
     public Scheme (String name) {
         this.name = name;
     }
 
+
+    /**
+     * Method adds block to scheme
+     * @param block to be added
+     */
     public void addBlock (IBlock block) {
         blockList.add(block);
     }
 
+    /**
+     * Calculate order of computation
+     * @return true if possible otherwise false
+     */
     public boolean calculateOrder () {
         boolean found;
         while (blockList.size() != orderBlockList.size()) {
@@ -40,10 +57,18 @@ public class Scheme {
         }
         return true;
     }
+
+    /**
+     * Method calculates whole scheme,
+     * Needs run calculate order before otherwise undefined
+     */
     public void calculate() {
         for(IBlock block : orderBlockList) block.calculate();
     }
 
+    /**
+     * Method calculates one step, can be used repeatedly for more steps
+     */
     public void calculateOne (){
         if (!orderBlockList.isEmpty()) {
             orderBlockList.get(0).calculate();
@@ -51,11 +76,20 @@ public class Scheme {
         }
     }
 
+    /**
+     * Method connect two ports one InputPort and one OutputPort
+     * @param inputPort InputPort to connect
+     * @param outputPort OutputPort to connect
+     */
     public void connectPorts (InputPort inputPort, OutputPort outputPort){
         outputPort.setConnection(inputPort);
         inputPort.setConnection(outputPort);
     }
 
+    /**
+     * gets name of the scheme
+     * @return name of scheme
+     */
     public String getName() {
         return name;
     }

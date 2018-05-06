@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This Class implemets methods in IBlock common for all blocks
+ */
 public abstract class AbstractBlock implements IBlock{
     protected List<InputPort> inputPorts = new ArrayList<>();
     protected List<OutputPort> outputPorts = new ArrayList<>();

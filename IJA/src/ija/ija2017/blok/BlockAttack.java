@@ -15,7 +15,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 
-
+/**
+ * This Block Is impementation of AbstractBlockUI reassembling attack of the fighter with weapon.
+ */
 public class BlockAttack extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort weapon = new InputPort(new DataWeapon());
@@ -23,6 +25,9 @@ public class BlockAttack extends AbstractBlockUI {
     private OutputPort weaponOutput = new OutputPort(new DataWeapon());
     private OutputPort fighterOutput = new OutputPort(new DataFighter());
 
+    /**
+     * constructor initialize inputPorts and outputPorts
+     */
     public BlockAttack() {
         inputPorts.add(fighter);
         inputPorts.add(weapon);

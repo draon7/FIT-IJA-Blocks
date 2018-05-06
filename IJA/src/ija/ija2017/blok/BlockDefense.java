@@ -5,13 +5,18 @@ import ija.ija2017.Data.DataFighter;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
-
+/**
+ * This Block Is impementation of AbstractBlockUI reassembling defense of the fighter against attack.
+ */
 public class BlockDefense extends AbstractBlockUI {
 
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort attack = new InputPort(new DataAttack());
     private OutputPort fighterAttacked = new OutputPort(new DataFighter());
 
+    /**
+     * constructor initialize inputPorts and outputPorts
+     */
     public BlockDefense() {
         inputPorts.add(fighter);
         inputPorts.add(attack);
