@@ -100,7 +100,6 @@ public class BlockConectionHandling {
         TextInputDialog dialog = new TextInputDialog("Val");
         dialog.setTitle("Wee");
         dialog.setHeaderText("Wee Header Wee");
-        dialog.showAndWait();
 
         for(IBlock block : activeScheme.getBlockList()){
             for(InputPort inputPort : block.getInputPorts()){
