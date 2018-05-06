@@ -19,6 +19,8 @@ import java.util.ArrayList;
 public class BlockHandlers {
     private final static Color strokeColor = Color.color(0.15,0.15,0.15,1);
     private final static Color strokeHoverColor = Color.YELLOW;
+    private final static Color circleColor = Color.ORANGE;
+    private final static Color circleHoverColor = Color.LIGHTYELLOW;
 
     static void handleMoveStart(MouseEvent e, AbstractBlockUI blockReference){
         blockReference.setPositionX(e.getSceneX());
@@ -40,7 +42,8 @@ public class BlockHandlers {
                 start.setY(start.getY()+deltaY);
     });
     }
-    static void handlePortClicked(MouseEvent e, /*AbstractBlockUI blockReference,*/ Circle circle, Path path, int numberOfPorts, int portIndex){
+    static void handlePortClicked(MouseEvent e, AbstractPort port, Circle circle, Path path, int numberOfPorts, int portIndex){
+        path.setMouseTransparent(true);
         path.getElements().clear();
         MoveTo start = new MoveTo();
         start.setX(circle.getCenterX()+circle.getParent().getLayoutX());
@@ -55,27 +58,43 @@ public class BlockHandlers {
         curve.setControlY2(start.getY());
         path.getElements().add(curve);
         path.toFront();
+
+        circle.setFill(circleHoverColor);
+
+        if      (port instanceof InputPort) {BlockConectionHandling.setInput((InputPort) port);}
+        else if (port instanceof OutputPort){BlockConectionHandling.setOutput((OutputPort) port);}
     }
-    static void hanlePortReleased(Path path, AbstractPort port) {
+    static void hanlePortReleased(AbstractPort port, Circle circle,Path path) {
+        path.setMouseTransparent(false);
         path.toBack();
         path.setStroke(Color.BLACK);
-        if (port instanceof InputPort){
-            System.out.println("Is InputPortInstance");
-            if(!(BlockConectionHandling.setInput((InputPort)port))){
-                System.out.println("Not Connected, clearing");
+
+        circle.setFill(circleColor);
+
+        if(port instanceof InputPort) {
+            if(!BlockConectionHandling.setInput((InputPort)port)){
+                deletePath(path);
                 BlockConectionHandling.removeInput();
-                path.getElements().clear();
-            }
-        }else if (port instanceof OutputPort){
-            System.out.println("Is OutputPortInstance");
-            if(!(BlockConectionHandling.setOutput((OutputPort)port))){
-                System.out.println("Not Connected, clearing");
                 BlockConectionHandling.removeOutput();
-                path.getElements().clear();
+                System.out.println("Delete");
             }
         }
+        else if(port instanceof OutputPort){
+            if(!BlockConectionHandling.setOutput((OutputPort)port)){
+                deletePath(path);
+                BlockConectionHandling.removeInput();
+                BlockConectionHandling.removeOutput();
+                System.out.println("Delete");
+            }
+        }
+        else{
+            deletePath(path);
+        }
+        BlockConectionHandling.removeInput();
+        BlockConectionHandling.removeOutput();
     }
     static void hanlePortDragged(MouseEvent e, AbstractBlockUI blockReference, Path path){
+        if(path.getElements().size() < 2){return;} //Prevent NullPointer Errors
         path.setStroke(Color.YELLOW);
         path.toFront();
         double currentX = e.getX()+blockReference.getBlock().getLayoutX();
@@ -105,28 +124,23 @@ public class BlockHandlers {
             }
         }
     }
-    public static void handlePortDragOver(Path path) {path.setStroke(strokeColor);}
+    public static void handlePortDragEntered(AbstractPort port, Circle circle) {
+        circle.setFill(circleHoverColor);
+        if      (port instanceof InputPort) BlockConectionHandling.setInput((InputPort)port);
+        else if (port instanceof OutputPort)BlockConectionHandling.setOutput((OutputPort)port);
+    }
+    public static void handlePortDragExited(AbstractPort port, Circle circle) {
+        circle.setFill(circleColor);
+        if      (port instanceof InputPort) BlockConectionHandling.removeInput();
+        else if (port instanceof OutputPort)BlockConectionHandling.removeOutput();
+    }
+    public static void handlePortDragReleased(MouseEvent e, AbstractPort port, Path path){}
+    private static void deletePath(Path p){p.getElements().clear();}
+
+    public static void handlePortEntered(Path path)  {path.setStroke(strokeHoverColor); path.toFront();}
+    public static void handlePortExited(Path path)   {path.setStroke(strokeColor); path.toBack();}
+
     public static void handlePathEntered(Path path)  {path.setStroke(strokeHoverColor);  path.toFront();}
     public static void handlePathExited(Path path)   {path.setStroke(strokeColor);   path.toBack();}
-
-    public static void handlePortEntered(Path path, AbstractPort port)  {
-        path.setStroke(strokeHoverColor);
-        path.toFront();
-        if(port instanceof InputPort){
-            BlockConectionHandling.setInput((InputPort)port);
-        }else if(port instanceof OutputPort){
-            BlockConectionHandling.setOutput((OutputPort)port);
-        }
-    }
-
-    public static void handlePortExited(Path path, AbstractPort port)   {
-        path.setStroke(strokeColor);
-        path.toBack();
-        if(port instanceof InputPort){
-            BlockConectionHandling.removeInput();
-        }else if(port instanceof OutputPort){
-            BlockConectionHandling.removeOutput();
-        }
-    }
 
 }

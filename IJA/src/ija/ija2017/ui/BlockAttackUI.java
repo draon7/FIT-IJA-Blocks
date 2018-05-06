@@ -59,32 +59,41 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
             }else{
                 port = getOutputPorts().get(index-getInputPorts().size());
             }
+            circle.setOnDragDetected(event -> {
+                circle.getScene().startFullDrag();
+                circle.startFullDrag();
+                System.out.println("Drag Detected");
+            });
             circle.setOnMousePressed(event -> {
-                BlockHandlers.handlePortClicked(event, circle, pathStorage, 2, 1);
+                System.out.println("Mouse Pressed");
+                event.setDragDetect(true);
+                group.setMouseTransparent(true);
+                circle.setMouseTransparent(true);
+                BlockHandlers.handlePortClicked(event, port ,circle, pathStorage, 2, 1);
             });
             circle.setOnMouseReleased(event -> {
-                BlockHandlers.hanlePortReleased(pathStorage, port);
+                System.out.println("Mouse Released");
+                group.setMouseTransparent(false);
+                circle.setMouseTransparent(false);
+                BlockHandlers.hanlePortReleased(port, circle, pathStorage);
             });
             circle.setOnMouseDragged(event -> {
+                System.out.println("Mouse Dragged");
+                event.setDragDetect(false);
                 BlockHandlers.hanlePortDragged(event, this, pathStorage);
             });
-            circle.setOnMouseDragOver(event -> {
-                BlockHandlers.handlePortDragOver(pathStorage);
-            });
-            circle.setOnMouseEntered(event -> {
-                BlockHandlers.handlePortEntered(pathStorage, port);
-            });
+            circle.setOnMouseDragEntered(e->BlockHandlers.handlePortDragEntered(port ,circle));
+            circle.setOnMouseDragExited(e->BlockHandlers.handlePortDragExited(port, circle));
+            circle.setOnMouseDragReleased(e->BlockHandlers.handlePortDragReleased(e, port, pathStorage));
+
+            circle.setOnMouseEntered(event -> BlockHandlers.handlePortEntered(pathStorage));
             circle.setOnMouseExited(event -> {
                 if(!(event.isPrimaryButtonDown())){
-                    BlockHandlers.handlePortExited(pathStorage, port);
+                    BlockHandlers.handlePortExited(pathStorage);
                 }
             });
-            pathStorage.setOnMouseEntered(event -> {
-                BlockHandlers.handlePathEntered(pathStorage);
-            });
-            pathStorage.setOnMouseExited(event -> {
-                BlockHandlers.handlePathExited(pathStorage);
-            });
+            pathStorage.setOnMouseEntered(event -> BlockHandlers.handlePathEntered(pathStorage));
+            pathStorage.setOnMouseExited(event -> BlockHandlers.handlePathExited(pathStorage));
             index++;
         }
     }
