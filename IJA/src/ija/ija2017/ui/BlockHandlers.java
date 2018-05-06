@@ -8,13 +8,11 @@ import ija.ija2017.port.OutputPort;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.*;
 import jdk.nashorn.internal.ir.Block;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BlockHandlers {
     private final static Color strokeColor = Color.color(0.15,0.15,0.15,1);
@@ -27,10 +25,46 @@ public class BlockHandlers {
         blockReference.setPositionY(e.getSceneY());
     }
     static void handleMoveDrag(MouseEvent e, AbstractBlockUI blockReference, ArrayList<Path> paths){
+        List<InputPort> inputPorts = blockReference.getInputPorts();
+        List<OutputPort> outputPorts = blockReference.getOutputPorts();
+
         double deltaX = e.getSceneX() - blockReference.getPositionX();
         double deltaY = e.getSceneY() - blockReference.getPositionY();
         double newX = deltaX + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX();
         double newY = deltaY + blockReference.getBlock().getLayoutY();
+
+        for (InputPort inPort : inputPorts){
+            OutputPort outPort = inPort.getConnection();
+            if(outPort != null){
+                Path path = outPort.getPath();
+                if(path.getElements().size() < 2){continue;}
+                double startX = ((MoveTo)path.getElements().get(0)).getX();
+                double startY = ((MoveTo)path.getElements().get(0)).getY();
+                CubicCurveTo cubicCurveTo = ((CubicCurveTo)path.getElements().get(1));
+                cubicCurveTo.setX(cubicCurveTo.getX()+deltaX);
+                cubicCurveTo.setY(cubicCurveTo.getY()+deltaY);
+                cubicCurveTo.setControlX1(cubicCurveTo.getControlX1()+deltaX/2);
+                cubicCurveTo.setControlY1(cubicCurveTo.getControlY1()+deltaY/2);
+                cubicCurveTo.setControlX2(cubicCurveTo.getControlX2()+deltaX/2);
+                cubicCurveTo.setControlY2(cubicCurveTo.getControlY2()+deltaY/2);
+            }
+        }
+        for (OutputPort outPort : outputPorts){
+            InputPort inPort = outPort.getConnection();
+            if(inPort != null){
+                Path path = inPort.getPath();
+                if(path.getElements().size() < 2){continue;}
+                double startX = ((MoveTo)path.getElements().get(0)).getX();
+                double startY = ((MoveTo)path.getElements().get(0)).getY();
+                CubicCurveTo cubicCurveTo = ((CubicCurveTo)path.getElements().get(1));
+                cubicCurveTo.setX(cubicCurveTo.getX()+deltaX);
+                cubicCurveTo.setY(cubicCurveTo.getY()+deltaY);
+                cubicCurveTo.setControlX1(cubicCurveTo.getControlX1()+deltaX/2);
+                cubicCurveTo.setControlY1(cubicCurveTo.getControlY1()+deltaY/2);
+                cubicCurveTo.setControlX2(cubicCurveTo.getControlX2()+deltaX/2);
+                cubicCurveTo.setControlY2(cubicCurveTo.getControlY2()+deltaY/2);
+            }
+        }
 
         blockReference.getBlock().relocate(newX, newY);
         blockReference.setPositionX(e.getSceneX());
