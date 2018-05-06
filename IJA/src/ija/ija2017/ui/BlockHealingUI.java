@@ -34,7 +34,7 @@ public class BlockHealingUI extends BlockHealing implements BlockUI {
     }
 
     public void CreateBlockUI(){
-        block = BlockCreateUi.CreateBlockHealingUI();
+        block = BlockCreateUI.CreateBlockHealingUI();
         AddHandlers(block);
         parent.getChildren().add(block);
 

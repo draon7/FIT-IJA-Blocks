@@ -21,7 +21,7 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
     }
 
     public void CreateBlockUI(){
-        setBlock(BlockCreateUi.CreateBlockAttackUI());
+        setBlock(BlockCreateUI.CreateBlockAttackUI());
         getBlock().getChildren().forEach(node -> {
             if(node instanceof Circle){
                 addPortList((Circle)node);

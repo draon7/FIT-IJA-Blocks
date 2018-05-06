@@ -5,7 +5,7 @@ import ija.ija2017.Data.DataAttack;
 import ija.ija2017.Data.DataWeapon;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
-import ija.ija2017.ui.BlockCreateUi;
+import ija.ija2017.ui.BlockCreateUI;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -70,7 +70,7 @@ public class BlockAttack extends AbstractBlockUI {
     double mouseY;*/
 
     /*public void createUI(Pane pane){
-        Group block = (Group) BlockCreateUi.CreateBlockAttackUI();
+        Group block = (Group) BlockCreateUI.CreateBlockAttackUI();
         pane.getChildren().add(block);
 
         block.setOnMousePressed(new EventHandler<MouseEvent>() {

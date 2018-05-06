@@ -34,7 +34,7 @@ public class BlockWeaponUpgradeUI extends BlockWeaponUpgrade implements BlockUI 
     }
 
     public void CreateBlockUI(){
-        block = BlockCreateUi.CreateBlockWeaponUpgradeUI();
+        block = BlockCreateUI.CreateBlockWeaponUpgradeUI();
         AddHandlers(block);
         parent.getChildren().add(block);
 
