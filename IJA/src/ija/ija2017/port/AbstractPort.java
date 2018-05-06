@@ -2,6 +2,7 @@ package ija.ija2017.port;
 
 import ija.ija2017.Data.AbstractData;
 import ija.ija2017.ui.BlockHandlers;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 
 /**
@@ -11,6 +12,7 @@ public abstract class AbstractPort {
     public AbstractPort(){
         path = new Path();
         path.setStrokeWidth(2);
+        path.setStroke(Color.color(0.15,0.15,0.15,1));
         path.setOnMouseEntered(event -> BlockHandlers.handlePathEntered(path));
         path.setOnMouseEntered(event -> BlockHandlers.handlePathExited(path));
     }

@@ -1,8 +1,8 @@
 package ija.ija2017.ui;
 
+import javafx.scene.Group;
+
 public interface BlockUI {
-    public double getPositionX();
-    public void setPositionX(double positionX);
-    public double getPositionY();
-    public void setPositionY(double positionY);
+    public void CreateBlockUI();
+    public void AddHandlers(Group group);
 }

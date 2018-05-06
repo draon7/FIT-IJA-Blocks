@@ -4,8 +4,9 @@ import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,9 @@ public class Scheme {
      * @param name name of the scheme
      */
     public Scheme (String name) {
-        setView(new AnchorPane());
+        AnchorPane pane = new AnchorPane();
+        pane.setBackground(new Background(new BackgroundFill(Color.color(0.30,0.30,0.30,1), CornerRadii.EMPTY, Insets.EMPTY)));
+        setView(pane);
         this.name = name;
     }
     private Pane view;
@@ -100,16 +103,20 @@ public class Scheme {
      */
     public void disconnectPort (AbstractPort port){
         if (port instanceof InputPort) {
+            port.getPath().getElements().clear();
             OutputPort outputPort = ((InputPort) port).getConnection();
             if (outputPort == null)
                 return;
+            outputPort.getPath().getElements().clear();
             outputPort.setConnection(null);
             ((InputPort) port).setConnection(null);
         }
         else {
             InputPort inputPort = ((OutputPort)port).getConnection();
+            port.getPath().getElements().clear();
             if (inputPort == null)
                 return;
+            inputPort.getPath().getElements().clear();
             inputPort.setConnection(null);
             ((OutputPort) port).setConnection(null);
         }

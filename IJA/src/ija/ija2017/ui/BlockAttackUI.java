@@ -5,18 +5,17 @@ import ija.ija2017.blok.BlockAttack;
 import ija.ija2017.port.AbstractPort;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 
 public class BlockAttackUI extends BlockAttack implements BlockUI {
-    //private BlockAttack blockCore;
-    private Pane parent;
-
 
     public BlockAttackUI(Pane pane){
-        parent = pane;
-        //blockCore = new BlockAttack();
+        setParent(pane);
         CreateBlockUI();
     }
 
@@ -27,36 +26,22 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
                 addPortList((Circle)node);
             }
         });
-        parent.getChildren().add(getBlock());
-        /*for (AbstractPort port : getInputPorts()){
-            parent.getChildren().add(port.getPath());
-            addPortPathList(port.getPath());
-        }
-        for (AbstractPort port : getOutputPorts()){
-            parent.getChildren().add(port.getPath());
-            addPortPathList(port.getPath());
-        }*/
+        getParent().getChildren().add(getBlock());
         getInputPorts().forEach(p -> {
-            parent.getChildren().add(p.getPath());
-            System.out.println("Adding: " + p.getPath());
+            getParent().getChildren().add(p.getPath());
             addPortPathList(p.getPath());
         });
         getOutputPorts().forEach(p -> {
-            parent.getChildren().add(p.getPath());
-            System.out.println("Adding: " + p.getPath());
+            getParent().getChildren().add(p.getPath());
             addPortPathList(p.getPath());
         });
         AddHandlers(getBlock());
     }
 
-
     public void AddHandlers(Group group){
-        group.getChildren().get(0).setOnMousePressed(event -> {
-            BlockHandlers.handleMoveStart(event, this);
-        });
-        group.getChildren().get(0).setOnMouseDragged(event -> {
-            BlockHandlers.handleMoveDrag(event, this, getPortPathList());
-        });
+
+        BlockHandlers.addMoveRemoveHandles(this);
+
         int index = 0;
         for(Circle circle : getPortList()){
             Path pathStorage;
@@ -68,25 +53,18 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
             }
             pathStorage = port.getPath();
             circle.setOnDragDetected(event -> {
-                circle.getScene().startFullDrag();
                 circle.startFullDrag();
-                System.out.println("Drag Detected");
             });
             circle.setOnMousePressed(event -> {
-                System.out.println("Mouse Pressed");
                 event.setDragDetect(true);
                 group.setMouseTransparent(true);
-                circle.setMouseTransparent(true);
                 BlockHandlers.handlePortClicked(event, port, circle, pathStorage, 2,1);
             });
             circle.setOnMouseReleased(event -> {
-                System.out.println("Mouse Released");
                 group.setMouseTransparent(false);
-                circle.setMouseTransparent(false);
                 BlockHandlers.hanlePortReleased(port, circle, pathStorage);
             });
             circle.setOnMouseDragged(event -> {
-                System.out.println("Mouse Dragged");
                 event.setDragDetect(false);
                 BlockHandlers.hanlePortDragged(event, this, pathStorage);
 
@@ -101,6 +79,7 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
                     BlockHandlers.handlePortExited(pathStorage);
                 }
             });
+            //pathStorage.setOnMouseDragged(event -> BlockHandlers.hanlePortDragged(event, this, pathStorage));
             pathStorage.setOnMouseEntered(event -> BlockHandlers.handlePathEntered(pathStorage));
             pathStorage.setOnMouseExited(event -> BlockHandlers.handlePathExited(pathStorage));
             index++;
