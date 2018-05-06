@@ -3,10 +3,16 @@ package ija.ija2017.ui;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 
 public class MainWindowController {
@@ -15,6 +21,9 @@ public class MainWindowController {
     @FXML private AnchorPane mainViewPane;
     @FXML private TabPane tabPane;
     @FXML private Tab addScheme;
+    @FXML private Button calculateButton;
+    @FXML private Button startButton;
+    @FXML private Button stepButton;
 
     private boolean initialized = false;
     private void setInitialized(boolean value){initialized = value;}
@@ -23,6 +32,12 @@ public class MainWindowController {
     public void initialize(){
         BlockConectionHandling.setMainView(mainViewPane);
         addTab(null, 1);
+        AnchorPane.setBottomAnchor(calculateButton,10d);
+        AnchorPane.setBottomAnchor(startButton,10d);
+        AnchorPane.setBottomAnchor(stepButton,10d);
+        calculateButton.toFront();
+        startButton.toFront();
+        stepButton.toFront();
         setInitialized(true);
     }
 
@@ -52,6 +67,36 @@ public class MainWindowController {
         //BlockWeaponUpgradeUI blockWeaponUpgrade = new BlockWeaponUpgradeUI(mainViewPane);
     }
     @FXML
+    protected void calculateScheme(){
+        if(BlockConectionHandling.runScheme()){
+            startButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+            stepButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+        }else{
+            startButton.setTextFill(Color.RED);
+            stepButton.setTextFill(Color.RED);
+        }
+    }
+    @FXML
+    protected void runScheme(){
+        if(BlockConectionHandling.runScheme()){
+            startButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+            stepButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+        }else{
+            startButton.setTextFill(Color.RED);
+            stepButton.setTextFill(Color.RED);
+        }
+    }
+    @FXML
+    protected void stepScheme(){
+        if(BlockConectionHandling.stepScheme()) {
+            startButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+            stepButton.setTextFill(Color.color(0.8,0.8,0.8,0));
+        }else{
+            startButton.setTextFill(Color.RED);
+            stepButton.setTextFill(Color.RED);
+        }
+    }
+    @FXML
     protected void changeScheme(){
         if (initialized == false) {return;}
         int index = 0;
@@ -65,6 +110,9 @@ public class MainWindowController {
             index += 1;
             addTab(null, index);
         }
+        calculateButton.toFront();
+        startButton.toFront();
+        stepButton.toFront();
     }
 
     private void addTab(String s, int index){

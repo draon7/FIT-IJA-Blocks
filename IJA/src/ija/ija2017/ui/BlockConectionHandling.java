@@ -20,6 +20,8 @@ public class BlockConectionHandling {
     private static Scheme activeScheme;
     private static ArrayList<Scheme> schemes = new ArrayList<Scheme>();
 
+    private static boolean calculated = false;
+
     public static ArrayList<Scheme> getSchemes() {return schemes;}
     public static void setSchemes(ArrayList<Scheme> schemes) {BlockConectionHandling.schemes = schemes;}
 
@@ -35,23 +37,23 @@ public class BlockConectionHandling {
     public static void createBlock(String s){
         switch (s){
             case("attack"):{
-                new BlockAttackUI(activeScheme.getView());
+                activeScheme.addBlock(new BlockAttackUI(activeScheme.getView()));
                 break;
             }
             case("defense"):{
-                new BlockDefenseUI(activeScheme.getView());
+                activeScheme.addBlock(new BlockDefenseUI(activeScheme.getView()));
                 break;
             }
             case("healing"):{
-                new BlockHealingUI(activeScheme.getView());
+                activeScheme.addBlock(new BlockHealingUI(activeScheme.getView()));
                 break;
             }
             case("training"):{
-                new BlockTrainingUI(activeScheme.getView());
+                activeScheme.addBlock(new BlockTrainingUI(activeScheme.getView()));
                 break;
             }
             case("upgrade"):{
-                new BlockWeaponUpgradeUI(activeScheme.getView());
+                activeScheme.addBlock(new BlockWeaponUpgradeUI(activeScheme.getView()));
                 break;
             }
         }
@@ -80,6 +82,27 @@ public class BlockConectionHandling {
         }
     }
 
+    public static boolean calculateScheme(){
+        if(activeScheme.calculateOrder()) {
+            calculated = true;
+            return true;
+        }
+        else{
+            calculated = false;
+            return false;
+        }
+    }
+    public static boolean runScheme(){
+        if(calculated == false) return false;
+        activeScheme.calculate();
+        return true;
+    }
+    public static boolean stepScheme(){
+        if(calculated == false) return false;
+        activeScheme.calculateOne();
+        return true;
+    }
+
     public static boolean setInput(InputPort port){
         inputPort = port;
             if(tryConnect()){
@@ -94,6 +117,7 @@ public class BlockConectionHandling {
     public static void removeOutput(){outputPort = null;}
 
     private static boolean tryConnect(){
+        calculated = false;
         if(inputPort != null && outputPort != null){
             if(inputPort.getConnection() != null){activeScheme.disconnectPort(inputPort);}
             if(outputPort.getConnection() != null){activeScheme.disconnectPort(outputPort);}
@@ -105,6 +129,7 @@ public class BlockConectionHandling {
         return false;
     }
     public static void disconnect(AbstractPort port) {
+        calculated = false;
         if (port instanceof OutputPort) {
             if (((OutputPort) port).getConnection() != null) {
                 activeScheme.disconnectPort(port);
