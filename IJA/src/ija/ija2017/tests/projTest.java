@@ -12,14 +12,23 @@ import org.junit.Test;
 import ija.ija2017.blok.IBlock;
 import ija.ija2017.scheme.Scheme;
 
+/**
+ * Class for testing
+ */
 public class projTest {
     private IBlock blockDefense;
     private IBlock BlockHealing;
     private Scheme sch1;
 
+    /**
+     * Constructor for tests
+     */
     public projTest(){
     }
 
+    /**
+     * Class for setting up tests
+     */
     @Before
     public void SetUp (){
         blockDefense = new BlockDefense();
@@ -29,6 +38,9 @@ public class projTest {
         sch1.addBlock(BlockHealing);
     }
 
+    /**
+     * Test1, tests types of InputPorts
+     */
     @Test
     public void Test01 (){
         Assert.assertEquals("test typu vstupniho portu 0", blockDefense.getInputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
@@ -36,12 +48,18 @@ public class projTest {
         Assert.assertEquals("test typu vystupniho portu", blockDefense.getOutputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
     }
 
+    /**
+     * Test2, tests OutputPorts
+     */
     @Test
     public void Test02 (){
         Assert.assertEquals("test typu vstupniho portu", BlockHealing.getInputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
         Assert.assertEquals("test typu vystupniho portu", BlockHealing.getOutputPorts().get(0).getDataType(), AbstractData.DataType.fighter);
     }
 
+    /**
+     * Test3, tests port calculation
+     */
     @Test
     public void Test03 (){
         blockDefense.getInputPorts().get(0).setData(new DataFighter(200.0, 10.0, 10.0,10.0));
@@ -50,6 +68,9 @@ public class projTest {
         Assert.assertEquals(100.0, ((DataFighter)blockDefense.getOutputPorts().get(0).getValue()).Health, 0.1);
     }
 
+    /**
+     * Test4, tests connection of blocks and calculation
+     */
     @Test
     public void Test04 () {
         sch1.connectPorts(blockDefense.getInputPorts().get(0), BlockHealing.getOutputPorts().get(0));
