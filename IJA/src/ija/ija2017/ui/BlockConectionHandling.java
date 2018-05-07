@@ -1,30 +1,24 @@
 package ija.ija2017.ui;
 
 import ija.ija2017.Data.AbstractData;
-import ija.ija2017.blok.AbstractBlock;
-import ija.ija2017.blok.AbstractBlockUI;
-import ija.ija2017.blok.BlockHealing;
+import ija.ija2017.Data.DataAttack;
+import ija.ija2017.Data.DataFighter;
+import ija.ija2017.Data.DataWeapon;
 import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import ija.ija2017.scheme.Scheme;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import ija.ija2017.ui.dialogs.data.DataAttackDialog;
+import ija.ija2017.ui.dialogs.data.DataFighterDialog;
+import ija.ija2017.ui.dialogs.data.DataWeaponDialog;
+import ija.ija2017.ui.dialogs.ui.AttackDialog;
+import ija.ija2017.ui.dialogs.ui.FighterDialog;
+import ija.ija2017.ui.dialogs.ui.WeaponDialog;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
-import java.util.Optional;
-
-import ija.ija2017.Data.AbstractData.DataType;
 
 public class BlockConectionHandling {
     private static BlockConectionHandling self = new BlockConectionHandling();
@@ -101,27 +95,34 @@ public class BlockConectionHandling {
         TextInputDialog dialog = new TextInputDialog("Val");
         dialog.setTitle("Wee");
         dialog.setHeaderText("Wee Header Wee");
+        AttackDialog attackDialog = new AttackDialog();
+        DataAttackDialog dataAttack;
+        FighterDialog fighterDialog = new FighterDialog();
+        DataFighterDialog dataFighter;
+        WeaponDialog weaponDialog = new WeaponDialog();
+        DataWeaponDialog dataWeapon;
 
         for(IBlock block : activeScheme.getBlockList()){
             for(InputPort inputPort : block.getInputPorts()){
                 if(inputPort.getConnection() == null){
                     switch(inputPort.getDataType()){
                         case attack:{
-                            dialog.setContentText("Attack: ");
-                            Optional<String> result = dialog.showAndWait();
-                            System.out.println(result);
+                            do{dataAttack = attackDialog.showAndWait();System.out.println(dataAttack);}while(dataAttack == null);
+                            inputPort.setData(new DataAttack(dataAttack.getAttackPower()));
                             break;
                         }
                         case fighter:{
-                            dialog.setContentText("Fighter: ");
-                            Optional<String> result = dialog.showAndWait();
-                            System.out.println(result);
+                            do{dataFighter = fighterDialog.showAndWait();System.out.println(dataFighter);}while(dataFighter == null);
+                            inputPort.setData(new DataFighter(
+                                    dataFighter.getHealth(),
+                                    dataFighter.getPower(),
+                                    dataFighter.getDexterity(),
+                                    dataFighter.getIntelligence()));
                             break;
                         }
                         case weapon:{
-                            dialog.setContentText("Weapon: ");
-                            Optional<String> result = dialog.showAndWait();
-                            System.out.println(result);
+                            do{dataWeapon = weaponDialog.showAndWait();System.out.println(dataWeapon);}while(dataWeapon == null);
+                            inputPort.setData(new DataWeapon(dataWeapon.getHandeling(), dataWeapon.getWeight()));
                             break;
                         }
                     }
