@@ -15,6 +15,7 @@ import jdk.nashorn.internal.ir.Block;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BlockHandlers {
     private final static Color strokeColor = Color.color(0.15,0.15,0.15,1);
     private final static Color strokeHoverColor = Color.YELLOW;
@@ -49,6 +50,9 @@ public class BlockHandlers {
         double newX = deltaX + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX();
         double newY = deltaY + blockReference.getBlock().getLayoutBounds().getMinY() + blockReference.getBlock().getLayoutY();
 
+        MoveTo startPoint = new MoveTo();
+        MoveTo endPoint = new MoveTo();
+
         for (InputPort inPort : inputPorts){
             OutputPort outPort = inPort.getConnection();
             if(outPort != null){
@@ -57,12 +61,13 @@ public class BlockHandlers {
                 double startX = ((MoveTo)path.getElements().get(0)).getX();
                 double startY = ((MoveTo)path.getElements().get(0)).getY();
                 CubicCurveTo cubicCurveTo = ((CubicCurveTo)path.getElements().get(1));
-                cubicCurveTo.setX(cubicCurveTo.getX()+deltaX);
-                cubicCurveTo.setY(cubicCurveTo.getY()+deltaY);
-                cubicCurveTo.setControlX1(cubicCurveTo.getControlX1()+deltaX/2);
-                cubicCurveTo.setControlY1(cubicCurveTo.getControlY1()+deltaY/2);
-                cubicCurveTo.setControlX2(cubicCurveTo.getControlX2()+deltaX/2);
-                cubicCurveTo.setControlY2(cubicCurveTo.getControlY2()+deltaY/2);
+
+                startPoint.setX(startX);
+                startPoint.setY(startY);
+                endPoint.setX(cubicCurveTo.getX()+deltaX);
+                endPoint.setY(cubicCurveTo.getY()+deltaY);
+
+                calculateOutputCurve(cubicCurveTo, startPoint, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
             }
         }
         for (OutputPort outPort : outputPorts){
@@ -73,23 +78,41 @@ public class BlockHandlers {
                 double startX = ((MoveTo)path.getElements().get(0)).getX();
                 double startY = ((MoveTo)path.getElements().get(0)).getY();
                 CubicCurveTo cubicCurveTo = ((CubicCurveTo)path.getElements().get(1));
-                cubicCurveTo.setX(cubicCurveTo.getX()+deltaX);
-                cubicCurveTo.setY(cubicCurveTo.getY()+deltaY);
-                cubicCurveTo.setControlX1(cubicCurveTo.getControlX1()+deltaX/2);
-                cubicCurveTo.setControlY1(cubicCurveTo.getControlY1()+deltaY/2);
-                cubicCurveTo.setControlX2(cubicCurveTo.getControlX2()+deltaX/2);
-                cubicCurveTo.setControlY2(cubicCurveTo.getControlY2()+deltaY/2);
+
+                startPoint.setX(startX);
+                startPoint.setY(startY);
+                endPoint.setX(cubicCurveTo.getX()+deltaX);
+                endPoint.setY(cubicCurveTo.getY()+deltaY);
+
+                calculateInputCurve(cubicCurveTo, startPoint, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
             }
         }
 
         blockReference.getBlock().relocate(newX, newY);
         blockReference.setPositionX(e.getSceneX());
         blockReference.setPositionY(e.getSceneY());
+
+        double blockWidth = blockReference.getBlock().getLayoutBounds().getMaxX();
+
         paths.forEach(path -> {
             if(path.getElements().isEmpty())return;
             MoveTo start = (MoveTo)path.getElements().get(0);
             start.setX(start.getX()+deltaX);
             start.setY(start.getY()+deltaY);
+
+            CubicCurveTo cubicCurveTo = ((CubicCurveTo)path.getElements().get(1));
+            endPoint.setX(cubicCurveTo.getX());
+            endPoint.setY(cubicCurveTo.getY());
+
+
+            double blockX = blockReference.getBlock().getLayoutX();
+            if(start.getX() < (blockX + (blockWidth/2))){
+                System.out.println("InPort");
+                calculateInputCurve(cubicCurveTo, start, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
+            }else {
+                System.out.println("OutPort");
+                calculateOutputCurve(cubicCurveTo, start, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
+            }
         });
     }
     static void handlePortClicked(MouseEvent e, AbstractPort port, Circle circle, Path path, int numberOfPorts, int portIndex){
@@ -157,35 +180,104 @@ public class BlockHandlers {
         BlockConectionHandling.removeInput();
         BlockConectionHandling.removeOutput();
     }
-    static void hanlePortDragged(MouseEvent e, AbstractBlockUI blockReference, Path path){
-        if(path.getElements().size() < 2){System.out.println("No elements in path");return;} //Prevent NullPointer Errors
-        path.setStroke(strokeHoverColor);
-        path.toFront();
-        double currentX = e.getX()+blockReference.getBlock().getLayoutX();
-        double currentY = e.getY()+blockReference.getBlock().getLayoutY();
-        ((CubicCurveTo)path.getElements().get(1)).setX(currentX);
-        ((CubicCurveTo)path.getElements().get(1)).setY(currentY);
-        if(currentX < blockReference.getBlock().getLayoutX()){
-            ((CubicCurveTo)path.getElements().get(1)).setControlX1(currentX - (currentX - blockReference.getBlock().getLayoutX())/2);
-            ((CubicCurveTo)path.getElements().get(1)).setControlX2(currentX - (currentX - blockReference.getBlock().getLayoutX())/2);
-            ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3));
-            ((CubicCurveTo)path.getElements().get(1)).setControlY2(currentY);
+    static void hanlePortDragged(MouseEvent e, AbstractBlockUI blockReference, AbstractPort port){
+        Path path;
+        path = port.getPath();
 
-        }else{
-            ((CubicCurveTo)path.getElements().get(1)).setControlX1(blockReference.getBlock().getLayoutX() - (currentX - blockReference.getBlock().getLayoutX()));
-            ((CubicCurveTo)path.getElements().get(1)).setControlX2(currentX + (currentX - blockReference.getBlock().getLayoutX()));
+        if(path.getElements().size() < 2){System.out.println("No elements in path"); return;} //Prevent NullPointer Errors
 
-            double deltaY = (blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3)) - currentY;
-            if(currentY < (blockReference.getBlock().getLayoutY()+(blockReference.getBlock().getLayoutBounds().getMaxY()*1/3))){
-                if(deltaY < 75){deltaY = 75;}
-                ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY() + (blockReference.getBlock().getLayoutBounds().getMaxY()*1/3) - deltaY);
-                ((CubicCurveTo)path.getElements().get(1)).setControlY2(currentY - deltaY);
+        Group g = blockReference.getBlock();
+        double currentX = e.getX() + g.getLayoutX();
+        double currentY = e.getY() + g.getLayoutY();
+        double blockX = g.getLayoutX();
+        double blockY = g.getLayoutY();
+        double blockHeight = g.getLayoutBounds().getMaxY();
+        double blockWidth = (g.getLayoutBounds().getMinX()+g.getLayoutBounds().getMaxX());
+        g = null;
+
+        MoveTo start = ((MoveTo)path.getElements().get(0));
+        CubicCurveTo curve = ((CubicCurveTo)path.getElements().get(1));
+
+        if(port instanceof InputPort) {
+            path.setStroke(strokeHoverColor);
+            path.toFront();
+            curve.setX(currentX);
+            curve.setY(currentY);
+
+            if(currentX < blockX){
+                curve.setControlX1(currentX - (currentX - blockX)/2);
+                curve.setControlX2(currentX - (currentX - blockX)/2);
+                curve.setControlY1(blockY + (blockHeight*1/2));
+                curve.setControlY2(currentY);
             }else{
-                if(deltaY > -75){deltaY = -75;}
-                ((CubicCurveTo)path.getElements().get(1)).setControlY1(blockReference.getBlock().getLayoutY() + (blockReference.getBlock().getLayoutBounds().getMaxY()*1/3) - deltaY);
-                ((CubicCurveTo)path.getElements().get(1)).setControlY2(currentY - deltaY);
+
+                curve.setControlX1(blockX - (currentX - blockX));
+                curve.setControlX2(currentX + (currentX - blockX));
+
+                double deltaY = (blockY + (blockHeight*1/2)) - currentY;
+
+                //+ (blockReference.getBlock().getLayoutBounds().getMaxY()*5/4) => block position - 1/4 of block width
+                if((currentY > (blockY - (blockHeight*1/4)) && (currentY < (blockY + (blockHeight*5/4))))){
+                    if(currentY < blockY + (blockHeight/2)){//Upper half
+                        if(deltaY < 75){deltaY = 75;}
+                        curve.setControlY1(blockY + (blockHeight*1/2) - deltaY);
+                        curve.setControlY2(currentY - deltaY);
+                    }else{//Lower half
+                        if(deltaY > -75){deltaY = -75;}
+                        curve.setControlY1(blockY + (blockHeight*1/2) - deltaY);
+                        curve.setControlY2(currentY - deltaY);
+                    }
+                    //+ (blockReference.getBlock().getLayoutBounds().getMaxY()*5/4) => block position + 5/4 of block width
+                }else{
+                    curve.setControlY1(currentY);
+                    curve.setControlY2(blockY + (blockWidth/2));
+                    if(Math.abs(blockX - currentX) < 35){
+                        curve.setControlX1(blockX - 35);
+                        curve.setControlX2(currentX + 35);
+                    }
+                }
             }
         }
+        else if(port instanceof OutputPort){
+            path.setStroke(strokeHoverColor);
+            path.toFront();
+            curve.setX(currentX);
+            curve.setY(currentY);
+            if(currentX > blockX + blockWidth){
+                curve.setControlX1(currentX - (currentX - (blockX + blockWidth))/2);
+                curve.setControlX2(currentX - (currentX - (blockX + blockWidth))/2);
+                curve.setControlY1(blockY + (blockHeight*1/2));
+                curve.setControlY2(currentY);
+
+            }else{
+                curve.setControlX1(blockX + blockWidth - (currentX - (blockX + blockWidth)));
+                curve.setControlX2(currentX + (currentX - (blockX + blockWidth)));
+
+                double deltaY = (blockY + (blockHeight*1/2)) - currentY;
+
+                //+ (blockReference.getBlock().getLayoutBounds().getMaxY()*5/4) => block position - 1/4 of block width
+                if((currentY > (blockY - (blockHeight*1/4)) && (currentY < (blockY + (blockHeight*5/4))))){
+                    if(currentY < blockY + (blockHeight/2)){//Upper half
+                        if(deltaY < 75){deltaY = 75;}
+                        curve.setControlY1(blockY + (blockHeight*1/2) - deltaY);
+                        curve.setControlY2(currentY - deltaY);
+                    }else{//Lower half
+                        if(deltaY > -75){deltaY = -75;}
+                        curve.setControlY1(blockY + (blockHeight*1/2) - deltaY);
+                        curve.setControlY2(currentY - deltaY);
+                    }
+                    //+ (blockReference.getBlock().getLayoutBounds().getMaxY()*5/4) => block position + 5/4 of block width
+                }else{
+                    curve.setControlY1(currentY);
+                    curve.setControlY2(blockY + (blockWidth/2));
+                    if(Math.abs(blockX + blockWidth - currentX) < 35){
+                        curve.setControlX1(blockX + blockWidth + 35);
+                        curve.setControlX2(currentX - 35);
+                    }
+                }
+            }
+        }
+
     }
     public static void handlePortDragEntered(AbstractPort port, Circle circle) {
         circle.setFill(circleHoverColor);
@@ -205,5 +297,70 @@ public class BlockHandlers {
 
     public static void handlePathEntered(Path path)  {path.setStroke(strokeHoverColor);  path.toFront();}
     public static void handlePathExited(Path path)   {path.setStroke(strokeColor);   path.toBack();}
+
+    private static void calculateOutputCurve(CubicCurveTo curve, MoveTo start, MoveTo end, double blockHeight){
+        System.out.println("Start: " + start + "|End: " + end + " |height: " + blockHeight);
+
+        double startX = start.getX();
+        double startY = start.getY();
+        double endX = end.getX();
+        double endY = end.getY();
+
+        curve.setX(endX);
+        curve.setY(endY);
+
+
+        if(start.getX() < end.getX()){
+            curve.setControlX1(startX - (startX - endX)*2/3 );
+            curve.setControlX2(endX + (startX - endX)*2/3 );
+            curve.setControlY1(startY);
+            curve.setControlY2(endY);
+        }else{
+            curve.setControlX1(startX + (startX - endX));
+            curve.setControlX2(endX - (startX - endX));
+            double deltaY = (startY - endY);
+
+            if(startY < endY){//Under
+                curve.setControlY1(endY);
+                curve.setControlY2(startY);
+            }else{//Above
+                curve.setControlY1(endY);
+                curve.setControlY2(startY);
+            }
+
+        }
+    }
+    private static void calculateInputCurve(CubicCurveTo curve, MoveTo start, MoveTo end, double blockHeight){
+        System.out.println("Start: " + start + "|End: " + end + " |height: " + blockHeight);
+
+        double startX = start.getX();
+        double startY = start.getY();
+        double endX = end.getX();
+        double endY = end.getY();
+
+        curve.setX(endX);
+        curve.setY(endY);
+
+
+        if(start.getX() > end.getX()){
+            curve.setControlX1(startX - (startX - endX)*2/3 );
+            curve.setControlX2(endX + (startX - endX)*2/3 );
+            curve.setControlY1(startY);
+            curve.setControlY2(endY);
+        }else{
+            curve.setControlX1(startX + (startX - endX));
+            curve.setControlX2(endX - (startX - endX));
+            double deltaY = (startY - endY);
+
+            if(startY < endY){//Under
+                curve.setControlY1(endY);
+                curve.setControlY2(startY);
+            }else{//Above
+                curve.setControlY1(endY);
+                curve.setControlY2(startY);
+            }
+
+        }
+    }
 
 }

@@ -66,7 +66,7 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
             });
             circle.setOnMouseDragged(event -> {
                 event.setDragDetect(false);
-                BlockHandlers.hanlePortDragged(event, this, pathStorage);
+                BlockHandlers.hanlePortDragged(event, this, port);
 
             });
             circle.setOnMouseDragEntered(e->BlockHandlers.handlePortDragEntered(port ,circle));
