@@ -3,6 +3,8 @@ package ija.ija2017.ui;
 import ija.ija2017.blok.AbstractBlockUI;
 import ija.ija2017.blok.BlockAttack;
 import ija.ija2017.port.AbstractPort;
+import ija.ija2017.port.InputPort;
+import ija.ija2017.port.OutputPort;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -21,21 +23,8 @@ public class BlockAttackUI extends BlockAttack implements BlockUI {
 
     public void CreateBlockUI(){
         setBlock(BlockCreateUI.CreateBlockAttackUI());
-        getBlock().getChildren().forEach(node -> {
-            if(node instanceof Circle){
-                addPortList((Circle)node);
-            }
-        });
-        getParent().getChildren().add(getBlock());
-        getInputPorts().forEach(p -> {
-            getParent().getChildren().add(p.getPath());
-            addPortPathList(p.getPath());
-        });
-        getOutputPorts().forEach(p -> {
-            getParent().getChildren().add(p.getPath());
-            addPortPathList(p.getPath());
-        });
-        AddHandlers(getBlock());
+        BlockCreateUI.CreatePortPathUI(this);
+        BlockHandlers.AddHandlers(this);
     }
 
     public void AddHandlers(Group group){

@@ -35,6 +35,7 @@ public class AttackDialog {
     }
 
     public DataAttackDialog showAndWait(){
+        attackField.clear();
         Optional<DataAttackDialog> newData = attackDialog.showAndWait();
         unlockAttackField();
         if(newData.isPresent()){

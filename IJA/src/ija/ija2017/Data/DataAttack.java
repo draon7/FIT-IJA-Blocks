@@ -23,4 +23,6 @@ public class DataAttack extends AbstractData {
         this.dataType = DataType.attack;
         AttackPower = 0;
     }
+
+    public double getAttackPower(){return  AttackPower;}
 }

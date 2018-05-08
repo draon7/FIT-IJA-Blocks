@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Class is reassembling schemes showed on ui it implements
  * calculation methods and connection of blocks
  */
-public class Scheme {
+public class Scheme implements Serializable {
     private String name;
 
     private List<IBlock> blockList = new ArrayList<IBlock>();
@@ -47,6 +48,7 @@ public class Scheme {
     public void addBlock (IBlock block) {
         blockList.add(block);
     }
+    public void removeBlock (IBlock block) {blockList.remove(block);}
 
     /**
      * Calculate order of computation

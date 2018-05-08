@@ -17,23 +17,76 @@ import java.util.List;
 
 
 public class BlockHandlers {
-    private final static Color strokeColor = Color.color(0.15,0.15,0.15,1);
-    private final static Color strokeHoverColor = Color.YELLOW;
-    private final static Color circleColor = Color.ORANGE;
-    private final static Color circleHoverColor = Color.LIGHTYELLOW;
+    public final static Color strokeColor = Color.color(0.15,0.15,0.15,1);
+    public final static Color strokeHoverColor = Color.YELLOW;
+    public final static Color circleColor = Color.ORANGE;
+    public final static Color circleHoverColor = Color.LIGHTYELLOW;
 
-    static void addMoveRemoveHandles(AbstractBlockUI blockRef){
-        blockRef.getBlock().getChildren().get(0).setOnMousePressed(event -> {
-            if(event.getButton() == MouseButton.SECONDARY){
-                for(AbstractPort port : blockRef.getInputPorts())    {BlockConectionHandling.disconnect(port);}
-                for(AbstractPort port : blockRef.getOutputPorts())   {BlockConectionHandling.disconnect(port);}
-                blockRef.getParent().getChildren().remove(blockRef.getBlock());
-                for(Path path : blockRef.getPortPathList()){blockRef.getParent().getChildren().remove(path);}
+
+    public static void AddHandlers(AbstractBlockUI blockReference){
+        Group group = blockReference.getBlock();
+        List<InputPort> inputPorts = blockReference.getInputPorts();
+        List<OutputPort> outputPorts = blockReference.getOutputPorts();
+
+        BlockHandlers.addMoveRemoveHandles(blockReference);
+
+        int index = 0;
+        for(Circle circle : blockReference.getPortList()){
+            Path pathStorage;
+            AbstractPort port;
+            if(index < inputPorts.size()){
+                port = inputPorts.get(index);
+            }else{
+                port = outputPorts.get(index-inputPorts.size());
             }
-            BlockHandlers.handleMoveStart(event, blockRef);
+            pathStorage = port.getPath();
+            circle.setOnDragDetected(event -> {
+                circle.startFullDrag();
+            });
+            circle.setOnMousePressed(event -> {
+                event.setDragDetect(true);
+                group.setMouseTransparent(true);
+                BlockHandlers.handlePortClicked(event, port, circle, pathStorage, 2,1);
+            });
+            circle.setOnMouseReleased(event -> {
+                group.setMouseTransparent(false);
+                BlockHandlers.hanlePortReleased(port, circle, pathStorage);
+            });
+            circle.setOnMouseDragged(event -> {
+                event.setDragDetect(false);
+                BlockHandlers.hanlePortDragged(event, blockReference, port);
+
+            });
+            circle.setOnMouseDragEntered(e->BlockHandlers.handlePortDragEntered(port ,circle));
+            circle.setOnMouseDragExited(e->BlockHandlers.handlePortDragExited(port, circle));
+            circle.setOnMouseDragReleased(e->BlockHandlers.handlePortDragReleased(e, port, pathStorage));
+
+            circle.setOnMouseEntered(event -> BlockHandlers.handlePortEntered(pathStorage));
+            circle.setOnMouseExited(event -> {
+                if(!(event.isPrimaryButtonDown())){
+                    BlockHandlers.handlePortExited(pathStorage);
+                }
+            });
+            //pathStorage.setOnMouseDragged(event -> BlockHandlers.hanlePortDragged(event, this, pathStorage));
+            pathStorage.setOnMouseEntered(event -> BlockHandlers.handlePathEntered(pathStorage));
+            pathStorage.setOnMouseExited(event -> BlockHandlers.handlePathExited(pathStorage));
+            index++;
+        }
+    }
+
+    static void addMoveRemoveHandles(AbstractBlockUI blockReference){
+        blockReference.getBlock().getChildren().get(0).setOnMousePressed(event -> {
+            if(event.getButton() == MouseButton.SECONDARY){
+                for(AbstractPort port : blockReference.getInputPorts())    {BlockConectionHandling.disconnect(port);}
+                for(AbstractPort port : blockReference.getOutputPorts())   {BlockConectionHandling.disconnect(port);}
+                blockReference.getParent().getChildren().remove(blockReference.getBlock());
+                for(Path path : blockReference.getPortPathList()){blockReference.getParent().getChildren().remove(path);}
+                BlockConectionHandling.removeBlock(blockReference);
+            }
+            BlockHandlers.handleMoveStart(event, blockReference);
         });
-        blockRef.getBlock().getChildren().get(0).setOnMouseDragged(event -> {
-            BlockHandlers.handleMoveDrag(event, blockRef, blockRef.getPortPathList());
+        blockReference.getBlock().getChildren().get(0).setOnMouseDragged(event -> {
+            BlockHandlers.handleMoveDrag(event, blockReference, blockReference.getPortPathList());
         });
     }
 

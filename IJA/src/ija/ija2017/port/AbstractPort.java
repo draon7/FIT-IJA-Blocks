@@ -3,21 +3,24 @@ package ija.ija2017.port;
 import ija.ija2017.Data.AbstractData;
 import ija.ija2017.ui.BlockHandlers;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 
 /**
  * Abstract Class AbstractPort implements methods common for InputPort and OutputPort
  */
 public abstract class AbstractPort {
+    protected AbstractData data;
+    public boolean isReady;
+    private Path path;
+    private Circle portCircle;
+
     public AbstractPort(){
         path = new Path();
         path.setStrokeWidth(2);
         path.setStroke(Color.color(0.15,0.15,0.15,1));
-        path.setOnMouseEntered(event -> BlockHandlers.handlePathEntered(path));
-        path.setOnMouseEntered(event -> BlockHandlers.handlePathExited(path));
+        portCircle = new Circle();
     }
-    protected AbstractData data;
-    public boolean isReady;
 
     /**
      * Method gets data in Port
@@ -58,8 +61,6 @@ public abstract class AbstractPort {
         return data.dataType;
     }
 
-    public Path path;
-
     /**
      * Method gets path rendered from port
      * @return Path path
@@ -72,6 +73,8 @@ public abstract class AbstractPort {
      */
     public void setPath(Path path) {this.path = path;}
 
+    public Circle getPortCircle() {return portCircle;}
+    public void setPortCircle(Circle portCircle) {this.portCircle = portCircle;}
 
 
 }

@@ -22,7 +22,7 @@
                 <Menu mnemonicParsing="false" text="File">
                   <items>
                         <MenuItem mnemonicParsing="false" text="New scheme" />
-                        <MenuItem mnemonicParsing="false" text="Save scheme" />
+                        <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveScheme" text="Save scheme" />
                     <MenuItem mnemonicParsing="false" text="Open scheme" />
                   </items>
                 </Menu>

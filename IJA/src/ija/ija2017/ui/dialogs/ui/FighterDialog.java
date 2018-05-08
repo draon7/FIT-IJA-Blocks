@@ -46,6 +46,10 @@ public class FighterDialog {
     }
 
     public DataFighterDialog showAndWait(){
+        healthField.clear();
+        powerField.clear();
+        dexterityField.clear();
+        intelligenceField.clear();
         Optional<DataFighterDialog> newData = weaponDialog.showAndWait();
         unlockAttackField();
         if(newData.isPresent()){

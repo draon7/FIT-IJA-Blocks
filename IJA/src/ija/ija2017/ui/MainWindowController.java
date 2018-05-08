@@ -4,15 +4,17 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 
 public class MainWindowController {
@@ -24,6 +26,9 @@ public class MainWindowController {
     @FXML private Button calculateButton;
     @FXML private Button startButton;
     @FXML private Button stepButton;
+    @FXML private MenuItem saveButton;
+
+    Alert alert = new Alert(Alert.AlertType.ERROR);
 
     private boolean initialized = false;
     private void setInitialized(boolean value){initialized = value;}
@@ -39,6 +44,17 @@ public class MainWindowController {
         startButton.toFront();
         stepButton.toFront();
         setInitialized(true);
+        alert.setTitle("Invalid scheme");
+        alert.setHeaderText("There is mistake in your scheme!");
+    }
+
+    @FXML
+    protected void saveScheme(){
+        try{
+        BlockConectionHandling.saveScheme();
+        }catch (IOException e){
+            System.out.println(e);
+        }
     }
 
     @FXML
@@ -71,9 +87,14 @@ public class MainWindowController {
         if(BlockConectionHandling.calculateScheme()){
             startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
             stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
+            startButton.setDisable(false);
+            stepButton.setDisable(false);
         }else{
             startButton.setTextFill(Color.RED);
             stepButton.setTextFill(Color.RED);
+            startButton.setDisable(true);
+            stepButton.setDisable(true);
+            alert.showAndWait();
         }
     }
     @FXML
@@ -84,6 +105,9 @@ public class MainWindowController {
         }else{
             startButton.setTextFill(Color.RED);
             stepButton.setTextFill(Color.RED);
+            startButton.setDisable(true);
+            stepButton.setDisable(true);
+            alert.showAndWait();
         }
     }
     @FXML
@@ -94,6 +118,9 @@ public class MainWindowController {
         }else{
             startButton.setTextFill(Color.RED);
             stepButton.setTextFill(Color.RED);
+            startButton.setDisable(true);
+            stepButton.setDisable(true);
+            alert.showAndWait();
         }
     }
     @FXML

@@ -38,6 +38,8 @@ public class WeaponDialog {
     }
 
     public DataWeaponDialog showAndWait(){
+        handlingField.clear();
+        weightField.clear();
         Optional<DataWeaponDialog> newData = weaponDialog.showAndWait();
         unlockAttackField();
         if(newData.isPresent()){

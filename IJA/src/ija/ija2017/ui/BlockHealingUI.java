@@ -17,20 +17,7 @@ public class BlockHealingUI extends BlockHealing implements BlockUI {
 
     public void CreateBlockUI(){
         setBlock(BlockCreateUI.CreateBlockHealingUI());
-        getBlock().getChildren().forEach(node -> {
-            if(node instanceof Circle){
-                addPortList((Circle)node);
-            }
-        });
-        getParent().getChildren().add(getBlock());
-        getInputPorts().forEach(p -> {
-            getParent().getChildren().add(p.getPath());
-            addPortPathList(p.getPath());
-        });
-        getOutputPorts().forEach(p -> {
-            getParent().getChildren().add(p.getPath());
-            addPortPathList(p.getPath());
-        });
+        BlockCreateUI.CreatePortPathUI(this);
         AddHandlers(getBlock());
     }
 

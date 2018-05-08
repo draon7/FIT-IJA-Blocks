@@ -17,7 +17,12 @@ import ija.ija2017.ui.dialogs.ui.FighterDialog;
 import ija.ija2017.ui.dialogs.ui.WeaponDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Path;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class BlockConectionHandling {
@@ -65,7 +70,17 @@ public class BlockConectionHandling {
                 break;
             }
         }
+    }
 
+    public static void removeBlock(IBlock blockReference){
+        activeScheme.removeBlock(blockReference);
+    }
+
+    public static void saveScheme() throws IOException {
+        FileOutputStream fos = new FileOutputStream("t.tmp");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(activeScheme);
+        oos.close();
     }
 
     public static void addScheme(String id){
@@ -107,22 +122,41 @@ public class BlockConectionHandling {
                 if(inputPort.getConnection() == null){
                     switch(inputPort.getDataType()){
                         case attack:{
-                            do{dataAttack = attackDialog.showAndWait();System.out.println(dataAttack);}while(dataAttack == null);
+                            inputPort.getPortCircle().setFill(BlockHandlers.circleHoverColor);
+                            do{
+                                dataAttack = attackDialog.showAndWait();
+                                System.out.println(dataAttack);
+                            }while(dataAttack == null);
+
                             inputPort.setData(new DataAttack(dataAttack.getAttackPower()));
+                            inputPort.getPortCircle().setFill(BlockHandlers.circleColor);
                             break;
                         }
                         case fighter:{
-                            do{dataFighter = fighterDialog.showAndWait();System.out.println(dataFighter);}while(dataFighter == null);
+                            inputPort.getPortCircle().setFill(BlockHandlers.circleHoverColor);
+                            do{
+                                dataFighter = fighterDialog.showAndWait();
+                                System.out.println(dataFighter);
+                            }while(dataFighter == null);
+
                             inputPort.setData(new DataFighter(
                                     dataFighter.getHealth(),
                                     dataFighter.getPower(),
                                     dataFighter.getDexterity(),
                                     dataFighter.getIntelligence()));
+
+                            inputPort.getPortCircle().setFill(BlockHandlers.circleColor);
                             break;
                         }
                         case weapon:{
-                            do{dataWeapon = weaponDialog.showAndWait();System.out.println(dataWeapon);}while(dataWeapon == null);
+                            inputPort.getPortCircle().setFill(BlockHandlers.circleHoverColor);
+                            do{
+                                dataWeapon = weaponDialog.showAndWait();
+                                System.out.println(dataWeapon);
+                            }while(dataWeapon == null);
+
                             inputPort.setData(new DataWeapon(dataWeapon.getHandeling(), dataWeapon.getWeight()));
+                            inputPort.getPortCircle().setFill(BlockHandlers.circleColor);
                             break;
                         }
                     }
