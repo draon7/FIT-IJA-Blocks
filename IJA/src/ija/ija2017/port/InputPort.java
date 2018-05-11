@@ -36,7 +36,7 @@ public class InputPort extends AbstractPort {
     }
 
     /**
-     * Method pdates readiness of the port, of conected port is ready sets
+     * Method updates readiness of the port, of connected port is ready sets
      * port ready
      */
     private void updateReady() {

@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,26 @@ import java.util.List;
  */
 public class Scheme implements Serializable {
     private String name;
-
+    private Pane view;
     private List<IBlock> blockList = new ArrayList<IBlock>();
     private List<IBlock> orderBlockList = new ArrayList<IBlock>();
+
+    private void writeObject(java.io.ObjectOutputStream stream)
+            throws IOException {
+        stream.writeObject(name);
+        stream.writeObject(blockList);
+        stream.writeObject(orderBlockList);
+    }
+
+    private void readObject(java.io.ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        name = (String) stream.readObject();
+        blockList = (List<IBlock>) stream.readObject();
+        orderBlockList = (List<IBlock>) stream.readObject();
+        AnchorPane pane = new AnchorPane();
+        pane.setBackground(new Background(new BackgroundFill(Color.color(0.30,0.30,0.30,1), CornerRadii.EMPTY, Insets.EMPTY)));
+        setView(pane);
+    }
 
     public List<IBlock> getBlockList() {return blockList;}
     public void setBlockList(List<IBlock> blockList) {this.blockList = blockList;}
@@ -35,7 +53,19 @@ public class Scheme implements Serializable {
         setView(pane);
         this.name = name;
     }
-    private Pane view;
+
+    /**
+     * sets name of the schemee
+     */
+    public void setName(String name) {this.name = name;}
+
+    /**
+     * gets name of the scheme
+     * @return name of scheme
+     */
+    public String getName() {
+        return name;
+    }
 
     public Pane getView() {return view;}
     public void setView(Pane view) {this.view = view;}
@@ -126,14 +156,5 @@ public class Scheme implements Serializable {
             inputPort.setConnection(null);
             ((OutputPort) port).setConnection(null);
         }
-    }
-
-
-    /**
-     * gets name of the scheme
-     * @return name of scheme
-     */
-    public String getName() {
-        return name;
     }
 }

@@ -21,9 +21,9 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="New scheme" />
-                        <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveScheme" text="Save scheme" />
-                    <MenuItem mnemonicParsing="false" text="Open scheme" />
+                        <MenuItem mnemonicParsing="false" text="New" />
+                        <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveScheme" text="Save" />
+                    <MenuItem fx:id="readButton" mnemonicParsing="false" onAction="#readScheme" text="Open" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">

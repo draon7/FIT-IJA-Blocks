@@ -5,6 +5,7 @@ import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
 import javafx.scene.layout.Pane;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.Objects;
 /**
  * This Class implemets methods in IBlock common for all blocks
  */
-public abstract class AbstractBlock implements IBlock{
+public abstract class AbstractBlock implements IBlock, Serializable{
     protected List<InputPort> inputPorts = new ArrayList<>();
     protected List<OutputPort> outputPorts = new ArrayList<>();
 

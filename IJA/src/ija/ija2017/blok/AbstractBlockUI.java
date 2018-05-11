@@ -1,10 +1,13 @@
 package ija.ija2017.blok;
 
+import ija.ija2017.ui.BlockCreateUI;
+import ija.ija2017.ui.BlockHandlers;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class AbstractBlockUI extends AbstractBlock {
@@ -14,6 +17,22 @@ public abstract class AbstractBlockUI extends AbstractBlock {
     private ArrayList<Path> portPathList = new ArrayList<Path>();
     private Group block;
     private Pane parent;
+
+    public AbstractBlockUI(){}
+
+    private void writeObject(java.io.ObjectOutputStream stream)
+            throws IOException {
+        stream.writeDouble(positionX);
+        stream.writeDouble(positionY);
+    }
+
+    private void readObject(java.io.ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        positionX = stream.readDouble();
+        positionY = stream.readDouble();
+        portList = new ArrayList<Circle>();
+        portPathList = new ArrayList<Path>();
+    }
 
     public Pane getParent() {return parent;}
     public void setParent(Pane parent) {this.parent = parent;}
@@ -57,16 +76,14 @@ public abstract class AbstractBlockUI extends AbstractBlock {
         this.positionY = positionY;
     }
 
-    public void reloadBlock(){
-        parent.getChildren().add(block);
-        block.setManaged(false);
+    public void reloadBlock(Pane parent){
+        setParent(parent);
+        BlockCreateUI.CreateBlockUI(this);
+        BlockCreateUI.CreatePortPathUI(this);
+        BlockHandlers.AddHandlers(this);
         block.relocate(positionX, positionY);
     }
-    public void setHandlers(){
-        block.getChildren().forEach(node -> {
-            if(node instanceof Circle){
-
-            }
-        });
+    public void reloadConnectionUI(){
+        BlockCreateUI.ReloadPaths(this);
     }
 }

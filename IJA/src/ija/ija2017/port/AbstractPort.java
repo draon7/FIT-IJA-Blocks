@@ -6,16 +6,34 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 /**
  * Abstract Class AbstractPort implements methods common for InputPort and OutputPort
  */
-public abstract class AbstractPort {
+public abstract class AbstractPort implements Serializable {
     protected AbstractData data;
     public boolean isReady;
     private Path path;
     private Circle portCircle;
 
     public AbstractPort(){
+        path = new Path();
+        path.setStrokeWidth(2);
+        path.setStroke(Color.color(0.15,0.15,0.15,1));
+        portCircle = new Circle();
+    }
+    private void writeObject(java.io.ObjectOutputStream stream)
+            throws IOException {
+        stream.writeObject(data);
+        stream.writeBoolean(isReady);
+    }
+
+    private void readObject(java.io.ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        data = (AbstractData) stream.readObject();
+        isReady = stream.readBoolean();
         path = new Path();
         path.setStrokeWidth(2);
         path.setStroke(Color.color(0.15,0.15,0.15,1));

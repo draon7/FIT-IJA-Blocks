@@ -1,6 +1,6 @@
 package ija.ija2017.ui;
 
-import ija.ija2017.blok.AbstractBlockUI;
+import ija.ija2017.blok.*;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
@@ -12,8 +12,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -23,122 +22,32 @@ import java.util.List;
 public final class BlockCreateUI {
     private BlockCreateUI(){}
 
-    public static Group CreateBlockAttackUI(){
-        System.out.println("Creating BlockAttack UI");
+    public static void CreateBlockUI(AbstractBlockUI blockReference){
+        System.out.println("Creating Block UI");
 
         Rectangle rect = createRectangle();
 
         Group block = new Group();
         block.getChildren().add(rect);
 
-        Label text = createText("Attack", rect);
+        Label text = createText("Block", rect);
+
+        if(blockReference instanceof BlockAttackUI){
+            text = createText("Attack", rect);}
+        else if(blockReference instanceof BlockDefenseUI){
+            text = createText("Defense", rect);}
+        else if(blockReference instanceof BlockHealingUI){
+            text = createText("Healing", rect);}
+        else if(blockReference instanceof BlockTrainingUI){
+            text = createText("Training", rect);}
+        else if(blockReference instanceof BlockWeaponUpgradeUI){
+            text = createText("WeaponUpgrade", rect);}
 
         block.getChildren().add(text);
 
         block.setManaged(false);
 
-        /*Circle circle = createCircle(0f, 1/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(0f,2/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,1/4f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,2/4f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,3/4f, rect);
-        block.getChildren().add(circle);*/
-
-        return block;
-    }
-    public static Group CreateBlockDefenseUI(){
-        System.out.println("Creating BlockDefense UI");
-
-        Rectangle rect = createRectangle();
-
-        Group block = new Group();
-        block.getChildren().add(rect);
-
-        Label text = createText("Defense", rect);
-
-        block.getChildren().add(text);
-
-        block.setManaged(false);
-
-        Circle circle = createCircle(0f, 1/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(0f,2/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,1/2f, rect);
-        block.getChildren().add(circle);
-
-        return block;
-    }
-    public static Group CreateBlockHealingUI(){
-        System.out.println("Creating BlockHealing UI");
-
-        Rectangle rect = createRectangle();
-
-        Group block = new Group();
-        block.getChildren().add(rect);
-
-        Label text = createText("Healing", rect);
-
-        block.getChildren().add(text);
-
-        block.setManaged(false);
-
-        Circle circle = createCircle(0f, 1/2f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,1/2f, rect);
-        block.getChildren().add(circle);
-
-        return block;
-    }
-    public static Group CreateBlockTrainingUI(){
-        System.out.println("Creating BlockTraining UI");
-
-        Rectangle rect = createRectangle();
-
-        Group block = new Group();
-        block.getChildren().add(rect);
-
-        Label text = createText("Training", rect);
-
-        block.getChildren().add(text);
-
-        block.setManaged(false);
-
-        Circle circle = createCircle(0f, 1/2f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,1/2f, rect);
-        block.getChildren().add(circle);
-
-        return block;
-    }
-    public static Group CreateBlockWeaponUpgradeUI(){
-        System.out.println("Creating BlockWeaponUpgrade UI");
-
-        Rectangle rect = createRectangle();
-
-        Group block = new Group();
-        block.getChildren().add(rect);
-
-        Label text = createText("Weapon Upgrade", rect);
-
-        block.getChildren().add(text);
-
-        block.setManaged(false);
-
-        Circle circle = createCircle(0f, 1/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(0f,2/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,1/3f, rect);
-        block.getChildren().add(circle);
-        circle = createCircle(1f,2/3f, rect);
-        block.getChildren().add(circle);
-
-        return block;
+        blockReference.setBlock(block);
     }
 
     public static void CreatePortPathUI(AbstractBlockUI blockReference){
@@ -159,7 +68,7 @@ public final class BlockCreateUI {
         portCount = inputPorts.size()+1;
         for(InputPort p : inputPorts){
             index++;
-            p.setPortCircle(BlockCreateUI.createCircle2(0, (index/portCount), blockRect));
+            p.setPortCircle(BlockCreateUI.createCircle(0, (index/portCount), blockRect));
             block.getChildren().add(p.getPortCircle());
             blockReference.addPortList(p.getPortCircle());
         }
@@ -167,7 +76,7 @@ public final class BlockCreateUI {
         portCount = outputPorts.size()+1;
         for(OutputPort p : outputPorts){
             index++;
-            p.setPortCircle(BlockCreateUI.createCircle2(1, (index/portCount), blockRect));
+            p.setPortCircle(BlockCreateUI.createCircle(1, (index/portCount), blockRect));
             block.getChildren().add(p.getPortCircle());
             blockReference.addPortList(p.getPortCircle());
         }
@@ -181,6 +90,58 @@ public final class BlockCreateUI {
             parent.getChildren().add(p.getPath());
             blockReference.addPortPathList(p.getPath());
         });
+    }
+
+    public static void ReloadPaths(AbstractBlockUI blockReference){
+        MoveTo start = new MoveTo();
+        MoveTo end = new MoveTo();
+        for(InputPort inPort : blockReference.getInputPorts()){
+            OutputPort outPort = inPort.getConnection();
+            if(outPort != null){
+                Path pathOut = outPort.getPath();
+
+                if(pathOut.getElements().size() > 1){continue;}
+                end.setX(outPort.getPortCircle().getCenterX()+outPort.getPortCircle().getParent().getLayoutX());
+                end.setY(outPort.getPortCircle().getCenterY()+outPort.getPortCircle().getParent().getLayoutY());
+
+                Path path = inPort.getPath();
+                Circle circle = inPort.getPortCircle();
+
+                path.getElements().clear();
+                start.setX(circle.getCenterX()+circle.getParent().getLayoutX());
+                start.setY(circle.getCenterY()+circle.getParent().getLayoutY());
+                path.getElements().add(start);
+
+                CubicCurveTo curve = new CubicCurveTo();
+                BlockHandlers.calculateInputCurve(curve, start, end);
+                path.getElements().add(curve);
+
+            }
+        }
+        for(OutputPort outPort : blockReference.getOutputPorts()){
+            InputPort inPort = outPort.getConnection();
+            if(inPort != null){
+                Path pathIn = inPort.getPath();
+
+                if(pathIn.getElements().size() > 1){continue;}
+                System.out.println("Circle: " + inPort.getPortCircle().getParent());
+                end.setX(inPort.getPortCircle().getCenterX()+inPort.getPortCircle().getParent().getLayoutX());
+                end.setY(inPort.getPortCircle().getCenterX()+inPort.getPortCircle().getParent().getLayoutY());
+
+                Path path = outPort.getPath();
+                Circle circle = outPort.getPortCircle();
+
+                path.getElements().clear();
+                start.setX(circle.getCenterX()+circle.getParent().getLayoutX());
+                start.setY(circle.getCenterY()+circle.getParent().getLayoutY());
+                path.getElements().add(start);
+
+                CubicCurveTo curve = new CubicCurveTo();
+                BlockHandlers.calculateOutputCurve(curve, start, end);
+                path.getElements().add(curve);
+
+            }
+        }
     }
 
     public static Rectangle createRectangle(){
@@ -202,10 +163,6 @@ public final class BlockCreateUI {
         return text;
     }
     public static Circle createCircle(float widthModifier, float heightModifier, Rectangle rect){
-        Circle circle = new Circle(rect.getX()+(rect.getWidth()*widthModifier), rect.getY()+(rect.getHeight()*heightModifier),5, Color.ORANGE);
-        return circle;
-    }
-    public static Circle createCircle2(float widthModifier, float heightModifier, Rectangle rect){
         return new Circle(rect.getX()+(rect.getWidth()*widthModifier), rect.getY()+(rect.getHeight()*heightModifier),5, Color.ORANGE);
     }
 }

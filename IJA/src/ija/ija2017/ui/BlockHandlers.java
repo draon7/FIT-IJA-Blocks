@@ -120,7 +120,7 @@ public class BlockHandlers {
                 endPoint.setX(cubicCurveTo.getX()+deltaX);
                 endPoint.setY(cubicCurveTo.getY()+deltaY);
 
-                calculateOutputCurve(cubicCurveTo, startPoint, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
+                calculateOutputCurve(cubicCurveTo, startPoint, endPoint);
             }
         }
         for (OutputPort outPort : outputPorts){
@@ -137,7 +137,7 @@ public class BlockHandlers {
                 endPoint.setX(cubicCurveTo.getX()+deltaX);
                 endPoint.setY(cubicCurveTo.getY()+deltaY);
 
-                calculateInputCurve(cubicCurveTo, startPoint, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
+                calculateInputCurve(cubicCurveTo, startPoint, endPoint);
             }
         }
 
@@ -161,10 +161,10 @@ public class BlockHandlers {
             double blockX = blockReference.getBlock().getLayoutX();
             if(start.getX() < (blockX + (blockWidth/2))){
                 System.out.println("InPort");
-                calculateInputCurve(cubicCurveTo, start, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
+                calculateInputCurve(cubicCurveTo, start, endPoint);
             }else {
                 System.out.println("OutPort");
-                calculateOutputCurve(cubicCurveTo, start, endPoint, blockReference.getBlock().getLayoutBounds().getMaxY());
+                calculateOutputCurve(cubicCurveTo, start, endPoint);
             }
         });
     }
@@ -351,8 +351,8 @@ public class BlockHandlers {
     public static void handlePathEntered(Path path)  {path.setStroke(strokeHoverColor);  path.toFront();}
     public static void handlePathExited(Path path)   {path.setStroke(strokeColor);   path.toBack();}
 
-    private static void calculateOutputCurve(CubicCurveTo curve, MoveTo start, MoveTo end, double blockHeight){
-        System.out.println("Start: " + start + "|End: " + end + " |height: " + blockHeight);
+    public static void calculateOutputCurve(CubicCurveTo curve, MoveTo start, MoveTo end){
+        System.out.println("Start: " + start + "|End: " + end);
 
         double startX = start.getX();
         double startY = start.getY();
@@ -383,8 +383,8 @@ public class BlockHandlers {
 
         }
     }
-    private static void calculateInputCurve(CubicCurveTo curve, MoveTo start, MoveTo end, double blockHeight){
-        System.out.println("Start: " + start + "|End: " + end + " |height: " + blockHeight);
+    public static void calculateInputCurve(CubicCurveTo curve, MoveTo start, MoveTo end){
+        System.out.println("Start: " + start + "|End: " + end);
 
         double startX = start.getX();
         double startY = start.getY();

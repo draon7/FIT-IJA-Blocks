@@ -4,6 +4,7 @@ import ija.ija2017.Data.AbstractData;
 import ija.ija2017.Data.DataAttack;
 import ija.ija2017.Data.DataFighter;
 import ija.ija2017.Data.DataWeapon;
+import ija.ija2017.blok.AbstractBlockUI;
 import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
@@ -17,12 +18,10 @@ import ija.ija2017.ui.dialogs.ui.FighterDialog;
 import ija.ija2017.ui.dialogs.ui.WeaponDialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Path;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class BlockConectionHandling {
@@ -76,11 +75,33 @@ public class BlockConectionHandling {
         activeScheme.removeBlock(blockReference);
     }
 
-    public static void saveScheme() throws IOException {
-        FileOutputStream fos = new FileOutputStream("t.tmp");
+    public static void saveScheme(File file) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
+        activeScheme.setName(file.getName().replace(".blockies", ""));
+        System.out.println("Saving: " + activeScheme.getName());
         oos.writeObject(activeScheme);
         oos.close();
+    }
+    public static String readScheme(File file) throws IOException {
+        FileInputStream fin= new FileInputStream (file);
+        ObjectInputStream ois = new ObjectInputStream(fin);
+        System.out.println("View is : " + activeScheme.getView());
+        Pane currentView = activeScheme.getView();
+        try {
+            activeScheme = (Scheme)ois.readObject();
+            activeScheme.setView(currentView);
+            System.out.println(activeScheme.getName());
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        System.out.println("View is : " + activeScheme.getView());
+        for(IBlock iBlock : activeScheme.getBlockList()) {
+            ((AbstractBlockUI)iBlock).reloadBlock(activeScheme.getView());
+            ((AbstractBlockUI)iBlock).reloadConnectionUI();
+        }
+        fin.close();
+        return file.getName().replace(".blockies", "");
     }
 
     public static void addScheme(String id){
@@ -97,13 +118,18 @@ public class BlockConectionHandling {
 
     public static void changeScheme(String id){
         for (Scheme scheme : getSchemes()) {
-            if(scheme.getName() == id){
+            System.out.println(scheme.getName());
+            if(scheme.getName().equals(id)){
                 System.out.println(scheme);
                 activeScheme = scheme;
                 scheme.getView().toFront();
                 return;
             }
         }
+    }
+
+    public static void renameScheme(String name){
+        activeScheme.setName(name);
     }
 
     public static boolean calculateScheme(){
@@ -185,8 +211,8 @@ public class BlockConectionHandling {
 
     public static boolean setInput(InputPort port){
         inputPort = port;
-            if(tryConnect()){
-                return true;
+        if(tryConnect()){
+            return true;
         }
         return false;
     }
