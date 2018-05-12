@@ -1,12 +1,16 @@
 package ija.ija2017.scheme;
 
+import ija.ija2017.blok.AbstractBlockUI;
 import ija.ija2017.blok.IBlock;
 import ija.ija2017.port.AbstractPort;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
+import ija.ija2017.ui.BlockColors;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,6 +23,7 @@ import java.util.List;
  */
 public class Scheme implements Serializable {
     private String name;
+    private Rectangle previousBlock;
     private Pane view;
     private List<IBlock> blockList = new ArrayList<IBlock>();
     private List<IBlock> orderBlockList = new ArrayList<IBlock>();
@@ -39,6 +44,8 @@ public class Scheme implements Serializable {
         pane.setBackground(new Background(new BackgroundFill(Color.color(0.30,0.30,0.30,1), CornerRadii.EMPTY, Insets.EMPTY)));
         setView(pane);
     }
+
+    public Rectangle getPreviousBlock(){return previousBlock;}
 
     public List<IBlock> getBlockList() {return blockList;}
     public void setBlockList(List<IBlock> blockList) {this.blockList = blockList;}
@@ -78,7 +85,7 @@ public class Scheme implements Serializable {
     public void addBlock (IBlock block) {
         blockList.add(block);
     }
-    public void removeBlock (IBlock block) {blockList.remove(block);}
+    public void removeBlock (IBlock block) {blockList.remove(block);orderBlockList.remove(block);}
 
     /**
      * Calculate order of computation
@@ -94,14 +101,16 @@ public class Scheme implements Serializable {
                         orderBlockList.add(block);
                         block.setReady();
                         found = true;
+                        System.out.println("Found");
                     }
                 }
             }
             if (!found) {
-                orderBlockList.clear();
+                System.out.println("NotFound");
                 return false;
             }
         }
+        System.out.println();
         return true;
     }
 
@@ -110,7 +119,7 @@ public class Scheme implements Serializable {
      * Needs run calculate order before otherwise undefined
      */
     public void calculate() {
-        for(IBlock block : orderBlockList) block.calculate();
+        for(IBlock block : orderBlockList) {System.out.println(block);block.calculate();}
     }
 
     /**
@@ -118,6 +127,14 @@ public class Scheme implements Serializable {
      */
     public void calculateOne (){
         if (!orderBlockList.isEmpty()) {
+            if(previousBlock != null){
+                previousBlock.setFill(BlockColors.blockFillColor);
+                previousBlock.setStroke(BlockColors.blocStrokeColor);
+            }
+            previousBlock = ((Rectangle)((Group)((AbstractBlockUI)orderBlockList.get(0)).getBlock()).getChildren().get(0));
+            previousBlock.setFill(BlockColors.blockFillHoverColor);
+            previousBlock.setStroke(BlockColors.blocStrokeHoverColor);
+
             orderBlockList.get(0).calculate();
             orderBlockList.remove(0);
         }

@@ -181,6 +181,10 @@ public class BlockConectionHandling {
     }
 
     public static boolean calculateScheme(){
+        if(activeScheme.getPreviousBlock() != null){
+            activeScheme.getPreviousBlock().setStroke(BlockColors.blocStrokeColor);
+            activeScheme.getPreviousBlock().setFill(BlockColors.blockFillColor);
+        }
         TextInputDialog dialog = new TextInputDialog("Val");
         dialog.setTitle("Wee");
         dialog.setHeaderText("Wee Header Wee");
