@@ -52,42 +52,101 @@ public abstract class AbstractBlockUI extends AbstractBlock {
     public ArrayList<Circle> getPortList() {
         return portList;
     }
+
+    /**
+     * Method adds circle to list of circles
+     * @param circle port circle
+     */
     public void addPortList(Circle circle){portList.add(circle);}
+
+    /**
+     * setter for list of circles
+     * @param portList
+     */
     public void setPortList(ArrayList<Circle> portList) {
         this.portList = portList;
     }
+
+    /**
+     * getter for list of paths
+     * @return
+     */
     public ArrayList<Path> getPortPathList() {
         return portPathList;
     }
+
+    /**
+     * Method adds path to list of paths from this block
+     * @param path path to add
+     */
     public void addPortPathList(Path path){portPathList.add(path);}
+
+    /**
+     * sets list of paths
+     * @param portList list to set
+     */
     public void setPortPathList(ArrayList<Path> portList) {
         this.portPathList = portList;
     }
+
+    /**
+     * gets goup representing block
+     * @return group representing block
+     */
     public Group getBlock() {
         return block;
     }
+
+    /**
+     * setter for group representing object
+     * @param block group representing object
+     */
     public void setBlock(Group block) {
         this.block = block;
     }
+
+    /**
+     * getter for X position of block
+     * @return X position of the block
+     */
     public double getPositionX() {
         return positionX;
     }
+
+    /**
+     * setter for X position of the block
+     * @param positionX X position of the block
+     */
     public void setPositionX(double positionX) {
         this.positionX = positionX;
     }
+
+    /**
+     * getter for Y position of block
+     * @return Y position of the block
+     */
     public double getPositionY() {
         return positionY;
     }
+
+    /**
+     * setter for Y position of the block
+     * @param positionY Y position of the block
+     */
     public void setPositionY(double positionY) {
         this.positionY = positionY;
     }
     public void setLastPositionX(double lastPositionX) {
         this.lastPositionX = lastPositionX;
     }
+    
     public void setLastPositionY(double lastPositionY) {
         this.lastPositionY = lastPositionY;
     }
 
+    /**
+     * Method to call when scheme is reloaded
+     */
     public void reloadBlock(Pane parent){
         setParent(parent);
         BlockCreateUI.CreateBlockUI(this);
