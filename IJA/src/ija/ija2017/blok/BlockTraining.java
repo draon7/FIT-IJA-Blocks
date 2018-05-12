@@ -21,12 +21,12 @@ public class BlockTraining extends AbstractBlockUI {
 
     public void calculate(){
         DataFighter dataFighter = (DataFighter)this.fighter.getValue();
-        DataFighter dataFighterHealed = (DataFighter)this.fighterTrained.getValue();
+        DataFighter dataFighterTrained = (DataFighter)this.fighterTrained.getValue();
 
-        dataFighterHealed.Health = dataFighter.Health*0.9;
-        dataFighterHealed.Dexterity = dataFighter.Dexterity *1.1;
-        dataFighterHealed.Intelligence = dataFighter.Intelligence *1.1;
-        dataFighterHealed.Power = dataFighter.Power*1.1;
+        dataFighterTrained.Health = dataFighter.Health*0.9;
+        dataFighterTrained.Dexterity = dataFighter.Dexterity *1.1;
+        dataFighterTrained.Intelligence = dataFighter.Intelligence *1.1;
+        dataFighterTrained.Power = dataFighter.Power*1.1;
     }
     public boolean canStart(){
         return fighter.isReady();
@@ -35,8 +35,5 @@ public class BlockTraining extends AbstractBlockUI {
     public void setReady() {
         fighterTrained.setReady();
     }
-
-    public void createUI(Pane pane){}
-
 
 }
