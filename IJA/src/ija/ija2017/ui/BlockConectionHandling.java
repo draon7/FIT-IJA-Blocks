@@ -16,20 +16,33 @@ import ija.ija2017.ui.dialogs.data.DataWeaponDialog;
 import ija.ija2017.ui.dialogs.ui.AttackDialog;
 import ija.ija2017.ui.dialogs.ui.FighterDialog;
 import ija.ija2017.ui.dialogs.ui.WeaponDialog;
+import ija.ija2017.ui.widgets.AttackDataWidget;
+import ija.ija2017.ui.widgets.FighterDataWidget;
+import ija.ija2017.ui.widgets.WeaponDataWidget;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class BlockConectionHandling {
     private static BlockConectionHandling self = new BlockConectionHandling();
-    public static BlockConectionHandling getSelf(){
-        return self;
-    }
+
+    private static AttackDataWidget attackDataWidget;
+    private static FighterDataWidget fighterDataWidget;
+    private static WeaponDataWidget weaponDataWidget;
+
+    private static InputPort inputPort;
+    private static OutputPort outputPort;
+
+    private static AnchorPane mainView;
     private static Scheme activeScheme;
     private static ArrayList<Scheme> schemes = new ArrayList<Scheme>();
 
@@ -38,14 +51,51 @@ public class BlockConectionHandling {
     public static ArrayList<Scheme> getSchemes() {return schemes;}
     public static void setSchemes(ArrayList<Scheme> schemes) {BlockConectionHandling.schemes = schemes;}
 
-
-    private static AnchorPane mainView;
-
+    public static BlockConectionHandling getSelf(){
+        return self;
+    }
     public static void setMainView(AnchorPane mainView){BlockConectionHandling.mainView = mainView;}
     public static AnchorPane getMainView() {return mainView;}
 
-    private static InputPort inputPort;
-    private static OutputPort outputPort;
+    public static void initialize(AnchorPane view){
+        mainView = view;
+        fighterDataWidget = new FighterDataWidget(mainView);
+        attackDataWidget = new AttackDataWidget(mainView);
+        weaponDataWidget = new WeaponDataWidget(mainView);
+    }
+
+    public static void showPortData(AbstractPort port){
+        MoveTo pos = new MoveTo();
+        Circle portCircle;
+        switch (port.getDataType()){
+            case fighter:{
+                portCircle = port.getPortCircle();
+                pos.setX(portCircle.getParent().getLayoutX() + portCircle.getCenterX() + portCircle.getRadius());
+                pos.setY(portCircle.getParent().getLayoutY() + portCircle.getCenterY() + portCircle.getRadius());
+                fighterDataWidget.show(port.getValue(), pos);
+                break;
+            }
+            case attack:{
+                portCircle = port.getPortCircle();
+                pos.setX(portCircle.getParent().getLayoutX() + portCircle.getCenterX() + portCircle.getRadius());
+                pos.setY(portCircle.getParent().getLayoutY() + portCircle.getCenterY() + portCircle.getRadius());
+                attackDataWidget.show(port.getValue(), pos);
+                break;
+            }
+            case weapon:{
+                portCircle = port.getPortCircle();
+                pos.setX(portCircle.getParent().getLayoutX() + portCircle.getCenterX() + portCircle.getRadius());
+                pos.setY(portCircle.getParent().getLayoutY() + portCircle.getCenterY() + portCircle.getRadius());
+                weaponDataWidget.show(port.getValue(), pos);
+                break;
+            }
+        }
+    }
+    public static void hidePortData(){
+        fighterDataWidget.hide();
+        attackDataWidget.hide();
+        weaponDataWidget.hide();
+    }
 
     public static void createBlock(String s){
         switch (s){
@@ -90,7 +140,6 @@ public class BlockConectionHandling {
         try {
             activeScheme = (Scheme)ois.readObject();
             activeScheme.setView(currentView);
-            System.out.println(activeScheme.getName());
         }catch (Exception e){
             System.out.println(e);
         }
@@ -128,7 +177,7 @@ public class BlockConectionHandling {
         activeScheme.setName(name);
     }
     public static void deleteScheme(){
-        System.out.println("Remove scheme: " + schemes.remove(activeScheme));
+        schemes.remove(activeScheme);
     }
 
     public static boolean calculateScheme(){
@@ -142,23 +191,82 @@ public class BlockConectionHandling {
         WeaponDialog weaponDialog = new WeaponDialog();
         DataWeaponDialog dataWeapon;
 
+        Rectangle blockUI = null;
+
         for(IBlock block : activeScheme.getBlockList()){
+            for(Node n : ((AbstractBlockUI)block).getBlock().getChildren()){
+                if(n instanceof Rectangle){
+                    blockUI = (Rectangle)n;
+                }
+            }
+            blockUI.setFill(BlockColors.blockFillHoverColor);
+            blockUI.setStroke(BlockColors.blocStrokeHoverColor);
             for(InputPort inputPort : block.getInputPorts()){
                 if(inputPort.getConnection() == null){
                     switch(inputPort.getDataType()){
                         case attack:{
-                            inputPort.getPortCircle().setFill(BlockHandlers.circleHoverColor);
+                            switch (inputPort.getDataType()){
+                                case attack:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverAttack);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                                case fighter:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverFighter);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                                case weapon:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverWeapon);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                            }
                             do{
                                 dataAttack = attackDialog.showAndWait();
                                 System.out.println(dataAttack);
                             }while(dataAttack == null);
 
                             inputPort.setData(new DataAttack(dataAttack.getAttackPower()));
-                            inputPort.getPortCircle().setFill(BlockHandlers.circleColor);
+                            inputPort.setReady();
+
+                            switch (inputPort.getDataType()){
+                                case attack:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorAttack);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                                case fighter:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorFighter);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                                case weapon:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorWeapon);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                            }
                             break;
                         }
                         case fighter:{
-                            inputPort.getPortCircle().setFill(BlockHandlers.circleHoverColor);
+                            switch (inputPort.getDataType()){
+                                case attack:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverAttack);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                                case fighter:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverFighter);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                                case weapon:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverWeapon);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                            }
                             do{
                                 dataFighter = fighterDialog.showAndWait();
                                 System.out.println(dataFighter);
@@ -169,24 +277,78 @@ public class BlockConectionHandling {
                                     dataFighter.getPower(),
                                     dataFighter.getDexterity(),
                                     dataFighter.getIntelligence()));
+                            inputPort.setReady();
 
-                            inputPort.getPortCircle().setFill(BlockHandlers.circleColor);
+                            switch (inputPort.getDataType()){
+                                case attack:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorAttack);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                                case fighter:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorFighter);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                                case weapon:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorWeapon);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                            }
                             break;
                         }
                         case weapon:{
-                            inputPort.getPortCircle().setFill(BlockHandlers.circleHoverColor);
+                            switch (inputPort.getDataType()){
+                                case attack:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverAttack);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                                case fighter:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverFighter);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                                case weapon:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorHoverWeapon);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadiusHover);
+                                    break;
+                                }
+                            }
                             do{
                                 dataWeapon = weaponDialog.showAndWait();
                                 System.out.println(dataWeapon);
                             }while(dataWeapon == null);
 
                             inputPort.setData(new DataWeapon(dataWeapon.getHandeling(), dataWeapon.getWeight()));
-                            inputPort.getPortCircle().setFill(BlockHandlers.circleColor);
+                            inputPort.setReady();
+
+                            switch (inputPort.getDataType()){
+                                case attack:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorAttack);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                                case fighter:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorFighter);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                                case weapon:{
+                                    inputPort.getPortCircle().setFill(BlockColors.portColorWeapon);
+                                    inputPort.getPortCircle().setRadius(BlockColors.circleRadius);
+                                    break;
+                                }
+                            }
                             break;
                         }
                     }
                 }
             }
+
+            blockUI.setFill(BlockColors.blockFillColor);
+            blockUI.setStroke(BlockColors.blocStrokeColor);
         }
         if(activeScheme.calculateOrder()) {
             calculated = true;
@@ -224,6 +386,7 @@ public class BlockConectionHandling {
     private static boolean tryConnect(){
         calculated = false;
         if(inputPort != null && outputPort != null){
+            if(inputPort.getDataType() != outputPort.getDataType()){return false;}
             if(inputPort.getConnection() != null){activeScheme.disconnectPort(inputPort);}
             if(outputPort.getConnection() != null){activeScheme.disconnectPort(outputPort);}
             activeScheme.connectPorts(inputPort, outputPort);

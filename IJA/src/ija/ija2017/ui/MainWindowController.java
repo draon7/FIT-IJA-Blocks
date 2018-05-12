@@ -40,7 +40,7 @@ public class MainWindowController {
 
     @FXML
     public void initialize(){
-        BlockConectionHandling.setMainView(mainViewPane);
+        BlockConectionHandling.initialize(mainViewPane);
         addTab(null, 1);
         AnchorPane.setBottomAnchor(calculateButton,10d);
         AnchorPane.setBottomAnchor(startButton,10d);

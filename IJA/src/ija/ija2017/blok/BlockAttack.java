@@ -5,14 +5,6 @@ import ija.ija2017.Data.DataAttack;
 import ija.ija2017.Data.DataWeapon;
 import ija.ija2017.port.InputPort;
 import ija.ija2017.port.OutputPort;
-import ija.ija2017.ui.BlockCreateUI;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
 
 /**
@@ -49,11 +41,11 @@ public class BlockAttack extends AbstractBlockUI {
         dataFighterOutput.Intelligence = dataFighter.Intelligence;
         dataFighterOutput.Power = dataFighter.Power;
 
-        dataWeaponOutput.Handeling = dataWeapon.Handeling;
+        dataWeaponOutput.Handling = dataWeapon.Handling;
         dataWeaponOutput.Weight = dataWeapon.Weight;
 
 
-        dataAttack.AttackPower = dataFighter.Power*dataWeapon.Weight+dataFighter.Dexterity *dataWeapon.Handeling;
+        dataAttack.AttackPower = dataFighter.Power*dataWeapon.Weight+dataFighter.Dexterity *dataWeapon.Handling;
     }
     public boolean canStart(){
         return (fighter.isReady() && weapon.isReady());
@@ -61,7 +53,7 @@ public class BlockAttack extends AbstractBlockUI {
 
     public void setReady() {
         attack.setReady();
-        fighter.setReady();
-        weapon.setReady();
+        weaponOutput.setReady();
+        fighterOutput.setReady();
     }
 }

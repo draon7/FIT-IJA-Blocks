@@ -17,10 +17,6 @@ import java.util.List;
 
 
 public class BlockHandlers {
-    public final static Color strokeColor = Color.color(0.15,0.15,0.15,1);
-    public final static Color strokeHoverColor = Color.YELLOW;
-    public final static Color circleColor = Color.ORANGE;
-    public final static Color circleHoverColor = Color.LIGHTYELLOW;
 
 
     public static void AddHandlers(AbstractBlockUI blockReference){
@@ -61,12 +57,9 @@ public class BlockHandlers {
             circle.setOnMouseDragExited(e->BlockHandlers.handlePortDragExited(port, circle));
             circle.setOnMouseDragReleased(e->BlockHandlers.handlePortDragReleased(e, port, pathStorage));
 
-            circle.setOnMouseEntered(event -> BlockHandlers.handlePortEntered(pathStorage));
-            circle.setOnMouseExited(event -> {
-                if(!(event.isPrimaryButtonDown())){
-                    BlockHandlers.handlePortExited(pathStorage);
-                }
-            });
+            circle.setOnMouseEntered(event -> BlockHandlers.handlePortEntered(port, pathStorage));
+            circle.setOnMouseExited(event -> BlockHandlers.handlePortExited(pathStorage));
+
             //pathStorage.setOnMouseDragged(event -> BlockHandlers.hanlePortDragged(event, this, pathStorage));
             pathStorage.setOnMouseEntered(event -> BlockHandlers.handlePathEntered(pathStorage));
             pathStorage.setOnMouseExited(event -> BlockHandlers.handlePathExited(pathStorage));
@@ -97,7 +90,6 @@ public class BlockHandlers {
     static void handleMoveDrag(MouseEvent e, AbstractBlockUI blockReference, ArrayList<Path> paths){
         List<InputPort> inputPorts = blockReference.getInputPorts();
         List<OutputPort> outputPorts = blockReference.getOutputPorts();
-
         double deltaX = e.getSceneX() - blockReference.getPositionX();
         double deltaY = e.getSceneY() - blockReference.getPositionY();
         double newX = deltaX + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX();
@@ -144,6 +136,9 @@ public class BlockHandlers {
         blockReference.getBlock().relocate(newX, newY);
         blockReference.setPositionX(e.getSceneX());
         blockReference.setPositionY(e.getSceneY());
+        blockReference.setLastPositionX(newX);
+        blockReference.setLastPositionY(newY);
+        System.out.println("New posX: " + newX + " |New posY: " + newY);
 
         double blockWidth = blockReference.getBlock().getLayoutBounds().getMaxX();
 
@@ -199,7 +194,23 @@ public class BlockHandlers {
         path.getElements().add(curve);
         path.toFront();
 
-        circle.setFill(circleHoverColor);
+        switch (port.getDataType()){
+            case attack:{
+                circle.setFill(BlockColors.portColorHoverAttack);
+                circle.setRadius(BlockColors.circleRadiusHover);
+                break;
+            }
+            case fighter:{
+                circle.setFill(BlockColors.portColorHoverFighter);
+                circle.setRadius(BlockColors.circleRadiusHover);
+                break;
+            }
+            case weapon:{
+                circle.setFill(BlockColors.portColorHoverWeapon);
+                circle.setRadius(BlockColors.circleRadiusHover);
+                break;
+            }
+        }
 
         //if      (port instanceof InputPort) {BlockConectionHandling.setInput((InputPort) port);}
         //else if (port instanceof OutputPort){BlockConectionHandling.setOutput((OutputPort) port);}
@@ -207,9 +218,25 @@ public class BlockHandlers {
     static void hanlePortReleased(AbstractPort port, Circle circle,Path path) {
         path.setMouseTransparent(false);
         path.toBack();
-        path.setStroke(strokeColor);
+        path.setStroke(BlockColors.strokeColor);
 
-        circle.setFill(circleColor);
+        switch (port.getDataType()){
+            case attack:{
+                circle.setFill(BlockColors.portColorAttack);
+                circle.setRadius(BlockColors.circleRadius);
+                break;
+            }
+            case fighter:{
+                circle.setFill(BlockColors.portColorFighter);
+                circle.setRadius(BlockColors.circleRadius);
+                break;
+            }
+            case weapon:{
+                circle.setFill(BlockColors.portColorWeapon);
+                circle.setRadius(BlockColors.circleRadius);
+                break;
+            }
+        }
 
         if(port instanceof InputPort) {
             if(!BlockConectionHandling.setInput((InputPort)port)){
@@ -252,7 +279,7 @@ public class BlockHandlers {
         CubicCurveTo curve = ((CubicCurveTo)path.getElements().get(1));
 
         if(port instanceof InputPort) {
-            path.setStroke(strokeHoverColor);
+            path.setStroke(BlockColors.strokeHoverColor);
             path.toFront();
             curve.setX(currentX);
             curve.setY(currentY);
@@ -292,7 +319,7 @@ public class BlockHandlers {
             }
         }
         else if(port instanceof OutputPort){
-            path.setStroke(strokeHoverColor);
+            path.setStroke(BlockColors.strokeHoverColor);
             path.toFront();
             curve.setX(currentX);
             curve.setY(currentY);
@@ -333,23 +360,61 @@ public class BlockHandlers {
 
     }
     public static void handlePortDragEntered(AbstractPort port, Circle circle) {
-        circle.setFill(circleHoverColor);
+        switch (port.getDataType()){
+            case attack:{
+                circle.setFill(BlockColors.portColorHoverAttack);
+                circle.setRadius(BlockColors.circleRadiusHover);
+                break;
+            }
+            case fighter:{
+                circle.setFill(BlockColors.portColorHoverFighter);
+                circle.setRadius(BlockColors.circleRadiusHover);
+                break;
+            }
+            case weapon:{
+                circle.setFill(BlockColors.portColorHoverWeapon);
+                circle.setRadius(BlockColors.circleRadiusHover);
+                break;
+            }
+        }
         if      (port instanceof InputPort) BlockConectionHandling.setInput((InputPort)port);
         else if (port instanceof OutputPort)BlockConectionHandling.setOutput((OutputPort)port);
     }
     public static void handlePortDragExited(AbstractPort port, Circle circle) {
-        circle.setFill(circleColor);
+        switch (port.getDataType()){
+        case attack:{
+            circle.setFill(BlockColors.portColorAttack);
+            circle.setRadius(BlockColors.circleRadius);
+            break;
+        }
+        case fighter:{
+            circle.setFill(BlockColors.portColorFighter);
+            circle.setRadius(BlockColors.circleRadius);
+            break;
+        }
+        case weapon:{
+            circle.setFill(BlockColors.portColorWeapon);
+            circle.setRadius(BlockColors.circleRadius);
+            break;
+        }
+    }
         if      (port instanceof InputPort) BlockConectionHandling.removeInput();
         else if (port instanceof OutputPort)BlockConectionHandling.removeOutput();
     }
     public static void handlePortDragReleased(MouseEvent e, AbstractPort port, Path path){}
     private static void deletePath(Path p){p.getElements().clear();}
 
-    public static void handlePortEntered(Path path)  {path.setStroke(strokeHoverColor); path.toFront();}
-    public static void handlePortExited(Path path)   {path.setStroke(strokeColor); path.toBack();}
+    public static void handlePortEntered(AbstractPort port, Path path)  {
+        path.setStroke(BlockColors.strokeHoverColor); path.toFront();
+        BlockConectionHandling.showPortData(port);
+    }
+    public static void handlePortExited(Path path)   {
+        path.setStroke(BlockColors.strokeColor); path.toBack();
+        BlockConectionHandling.hidePortData();
+    }
 
-    public static void handlePathEntered(Path path)  {path.setStroke(strokeHoverColor);  path.toFront();}
-    public static void handlePathExited(Path path)   {path.setStroke(strokeColor);   path.toBack();}
+    public static void handlePathEntered(Path path)  {path.setStroke(BlockColors.strokeHoverColor);  path.toFront();}
+    public static void handlePathExited(Path path)   {path.setStroke(BlockColors.strokeColor);   path.toBack();}
 
     public static void calculateOutputCurve(CubicCurveTo curve, MoveTo start, MoveTo end){
         System.out.println("Start: " + start + "|End: " + end);

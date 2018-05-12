@@ -13,6 +13,8 @@ import java.util.ArrayList;
 public abstract class AbstractBlockUI extends AbstractBlock {
     private double positionX;
     private double positionY;
+    private double lastPositionX;
+    private double lastPositionY;
     private ArrayList<Circle> portList = new ArrayList<Circle>();
     private ArrayList<Path> portPathList = new ArrayList<Path>();
     private Group block;
@@ -24,12 +26,16 @@ public abstract class AbstractBlockUI extends AbstractBlock {
             throws IOException {
         stream.writeDouble(positionX);
         stream.writeDouble(positionY);
+        stream.writeDouble(lastPositionX);
+        stream.writeDouble(lastPositionY);
     }
 
     private void readObject(java.io.ObjectInputStream stream)
             throws IOException, ClassNotFoundException {
         positionX = stream.readDouble();
         positionY = stream.readDouble();
+        lastPositionX = stream.readDouble();
+        lastPositionY = stream.readDouble();
         portList = new ArrayList<Circle>();
         portPathList = new ArrayList<Path>();
     }
@@ -75,13 +81,21 @@ public abstract class AbstractBlockUI extends AbstractBlock {
     public void setPositionY(double positionY) {
         this.positionY = positionY;
     }
+    public void setLastPositionX(double lastPositionX) {
+        this.lastPositionX = lastPositionX;
+    }
+    public void setLastPositionY(double lastPositionY) {
+        this.lastPositionY = lastPositionY;
+    }
 
     public void reloadBlock(Pane parent){
         setParent(parent);
         BlockCreateUI.CreateBlockUI(this);
         BlockCreateUI.CreatePortPathUI(this);
         BlockHandlers.AddHandlers(this);
-        block.relocate(positionX, positionY);
+        System.out.println("X: " + positionX + " |Y: " + positionY);
+        System.out.println("LastX: " + lastPositionX + " |LastY: " + lastPositionY);
+        block.relocate(lastPositionX, lastPositionY);
     }
     public void reloadConnectionUI(){
         BlockCreateUI.ReloadPaths(this);

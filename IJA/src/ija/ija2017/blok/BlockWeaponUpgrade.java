@@ -14,7 +14,7 @@ public class BlockWeaponUpgrade extends AbstractBlockUI {
     private InputPort fighter = new InputPort(new DataFighter());
     private InputPort weapon = new InputPort(new DataWeapon());
     private OutputPort fighterOutput = new OutputPort(new DataFighter());
-    private OutputPort weaponUpgraded = new OutputPort(new DataAttack());
+    private OutputPort weaponUpgraded = new OutputPort(new DataWeapon());
 
     /**
      * constructor initialize inputPorts and outputPorts
@@ -38,7 +38,7 @@ public class BlockWeaponUpgrade extends AbstractBlockUI {
         dataFighterOutput.Intelligence = dataFighter.Intelligence *1.05;
         dataFighterOutput.Power = dataFighter.Power;
 
-        dataWeaponUpgraded.Handeling = dataWeapon.Handeling*1.1;
+        dataWeaponUpgraded.Handling = dataWeapon.Handling *1.1;
         dataWeaponUpgraded.Weight = dataWeapon.Weight*1.1;
     }
     public boolean canStart(){
@@ -46,7 +46,7 @@ public class BlockWeaponUpgrade extends AbstractBlockUI {
     }
 
     public void setReady() {
-        fighter.setReady();
+        fighterOutput.setReady();
         weaponUpgraded.setReady();
     }
 

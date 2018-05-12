@@ -20,10 +20,9 @@ import java.util.List;
 
 
 public final class BlockCreateUI {
-    private BlockCreateUI(){}
+
 
     public static void CreateBlockUI(AbstractBlockUI blockReference){
-        System.out.println("Creating Block UI");
 
         Rectangle rect = createRectangle();
 
@@ -59,6 +58,7 @@ public final class BlockCreateUI {
         Rectangle blockRect = null;
         float portCount = 0;
         float index = 0;
+        Color portColor = Color.WHITE;
 
         for(Node n : block.getChildren()){
             if (n instanceof Rectangle){
@@ -68,7 +68,21 @@ public final class BlockCreateUI {
         portCount = inputPorts.size()+1;
         for(InputPort p : inputPorts){
             index++;
-            p.setPortCircle(BlockCreateUI.createCircle(0, (index/portCount), blockRect));
+            switch (p.getDataType()){
+                case attack:{
+                    portColor = BlockColors.portColorAttack;
+                    break;
+                }
+                case fighter:{
+                    portColor = BlockColors.portColorFighter;
+                    break;
+                }
+                case weapon:{
+                    portColor = BlockColors.portColorWeapon;
+                    break;
+                }
+            }
+            p.setPortCircle(BlockCreateUI.createCircle(0, (index/portCount), blockRect, portColor));
             block.getChildren().add(p.getPortCircle());
             blockReference.addPortList(p.getPortCircle());
         }
@@ -76,7 +90,21 @@ public final class BlockCreateUI {
         portCount = outputPorts.size()+1;
         for(OutputPort p : outputPorts){
             index++;
-            p.setPortCircle(BlockCreateUI.createCircle(1, (index/portCount), blockRect));
+            switch (p.getDataType()){
+                case attack:{
+                    portColor = BlockColors.portColorAttack;
+                    break;
+                }
+                case fighter:{
+                    portColor = BlockColors.portColorFighter;
+                    break;
+                }
+                case weapon:{
+                    portColor = BlockColors.portColorWeapon;
+                    break;
+                }
+            }
+            p.setPortCircle(BlockCreateUI.createCircle(1, (index/portCount), blockRect, portColor));
             block.getChildren().add(p.getPortCircle());
             blockReference.addPortList(p.getPortCircle());
         }
@@ -162,7 +190,7 @@ public final class BlockCreateUI {
         text.setMouseTransparent(true);
         return text;
     }
-    public static Circle createCircle(float widthModifier, float heightModifier, Rectangle rect){
-        return new Circle(rect.getX()+(rect.getWidth()*widthModifier), rect.getY()+(rect.getHeight()*heightModifier),5, Color.ORANGE);
+    public static Circle createCircle(float widthModifier, float heightModifier, Rectangle rect, Color portColor){
+        return new Circle(rect.getX()+(rect.getWidth()*widthModifier), rect.getY()+(rect.getHeight()*heightModifier), BlockColors.circleRadius, portColor);//Color.ORANGE
     }
 }
