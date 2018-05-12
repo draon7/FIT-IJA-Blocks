@@ -22,7 +22,7 @@ public class FighterDialog {
 
     public FighterDialog(){
         weaponDialog = new Dialog<>();
-        weaponDialog.setTitle("Weapon");
+        weaponDialog.setTitle("Fighter");
         dialogPane = weaponDialog.getDialogPane();
         dialogPane.getButtonTypes().addAll(ButtonType.APPLY);
 
