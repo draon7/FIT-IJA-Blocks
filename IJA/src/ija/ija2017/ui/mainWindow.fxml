@@ -45,7 +45,7 @@
             </TabPane>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox style="-fx-background-color: #404040;">
+                  <HBox fx:id="menuBox" style="-fx-background-color: #404040;">
                      <children>
                         <VBox maxHeight="400.0" minHeight="400.0" prefHeight="400.0" prefWidth="100.0" style="-fx-background-color: #404040;">
                            <children>
@@ -85,7 +85,7 @@
                               <Button fx:id="startButton" layoutX="71.0" layoutY="406.0" mnemonicParsing="false" onMouseClicked="#runScheme" text="Start" />
                               <Button fx:id="stepButton" layoutX="121.0" layoutY="406.0" mnemonicParsing="false" onMouseClicked="#stepScheme" text="Step" />
                               <Button fx:id="calculateButton" layoutX="14.0" layoutY="406.0" mnemonicParsing="false" onMouseClicked="#calculateScheme" text="Check" />
-                              <Button fx:id="deleteSchemeButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#deleteScheme" text="Delete scheme" />
+                              <Button fx:id="deleteSchemeButton" layoutX="292.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#deleteScheme" text="Delete scheme" />
                            </children></AnchorPane>
                      </children></VBox>
                </children>

@@ -7,10 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
@@ -32,6 +29,7 @@ public class MainWindowController {
     @FXML private Button deleteSchemeButton;
     @FXML private MenuItem saveButton;
     @FXML private MenuItem readButton;
+    @FXML private HBox menuBox;
 
     Alert alert = new Alert(Alert.AlertType.ERROR);
 
@@ -46,6 +44,8 @@ public class MainWindowController {
         AnchorPane.setBottomAnchor(startButton,10d);
         AnchorPane.setBottomAnchor(stepButton,10d);
         AnchorPane.setTopAnchor(deleteSchemeButton,10d);
+        AnchorPane.setRightAnchor(deleteSchemeButton,10d);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         calculateButton.toFront();
         startButton.toFront();
         stepButton.toFront();
