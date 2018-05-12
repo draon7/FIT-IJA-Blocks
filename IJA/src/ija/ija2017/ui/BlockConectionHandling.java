@@ -16,6 +16,7 @@ import ija.ija2017.ui.dialogs.data.DataWeaponDialog;
 import ija.ija2017.ui.dialogs.ui.AttackDialog;
 import ija.ija2017.ui.dialogs.ui.FighterDialog;
 import ija.ija2017.ui.dialogs.ui.WeaponDialog;
+import javafx.scene.Group;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -79,14 +80,12 @@ public class BlockConectionHandling {
         FileOutputStream fos = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         activeScheme.setName(file.getName().replace(".blockies", ""));
-        System.out.println("Saving: " + activeScheme.getName());
         oos.writeObject(activeScheme);
         oos.close();
     }
-    public static String readScheme(File file) throws IOException {
+    public static void readScheme(File file) throws IOException {
         FileInputStream fin= new FileInputStream (file);
         ObjectInputStream ois = new ObjectInputStream(fin);
-        System.out.println("View is : " + activeScheme.getView());
         Pane currentView = activeScheme.getView();
         try {
             activeScheme = (Scheme)ois.readObject();
@@ -95,18 +94,17 @@ public class BlockConectionHandling {
         }catch (Exception e){
             System.out.println(e);
         }
-        System.out.println("View is : " + activeScheme.getView());
         for(IBlock iBlock : activeScheme.getBlockList()) {
             ((AbstractBlockUI)iBlock).reloadBlock(activeScheme.getView());
+        }
+        for(IBlock iBlock : activeScheme.getBlockList()) {
             ((AbstractBlockUI)iBlock).reloadConnectionUI();
         }
         fin.close();
-        return file.getName().replace(".blockies", "");
     }
 
     public static void addScheme(String id){
         Scheme newScheme = new Scheme(id);
-        System.out.println(getMainView());
         getMainView().getChildren().add(newScheme.getView());
         AnchorPane.setTopAnchor(newScheme.getView(), 0d);
         AnchorPane.setRightAnchor(newScheme.getView(), 0d);
@@ -118,9 +116,7 @@ public class BlockConectionHandling {
 
     public static void changeScheme(String id){
         for (Scheme scheme : getSchemes()) {
-            System.out.println(scheme.getName());
             if(scheme.getName().equals(id)){
-                System.out.println(scheme);
                 activeScheme = scheme;
                 scheme.getView().toFront();
                 return;
@@ -130,6 +126,9 @@ public class BlockConectionHandling {
 
     public static void renameScheme(String name){
         activeScheme.setName(name);
+    }
+    public static void deleteScheme(){
+        System.out.println("Remove scheme: " + schemes.remove(activeScheme));
     }
 
     public static boolean calculateScheme(){

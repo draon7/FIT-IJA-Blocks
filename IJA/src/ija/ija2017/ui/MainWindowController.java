@@ -29,6 +29,7 @@ public class MainWindowController {
     @FXML private Button calculateButton;
     @FXML private Button startButton;
     @FXML private Button stepButton;
+    @FXML private Button deleteSchemeButton;
     @FXML private MenuItem saveButton;
     @FXML private MenuItem readButton;
 
@@ -44,9 +45,11 @@ public class MainWindowController {
         AnchorPane.setBottomAnchor(calculateButton,10d);
         AnchorPane.setBottomAnchor(startButton,10d);
         AnchorPane.setBottomAnchor(stepButton,10d);
+        AnchorPane.setTopAnchor(deleteSchemeButton,10d);
         calculateButton.toFront();
         startButton.toFront();
         stepButton.toFront();
+        deleteSchemeButton.toFront();
         setInitialized(true);
         alert.setTitle("Invalid scheme");
         alert.setHeaderText("There is mistake in your scheme!");
@@ -62,6 +65,7 @@ public class MainWindowController {
             File selectedFile = fileChooser.showSaveDialog(mainViewPane.getScene().getWindow());
             if (selectedFile != null) {
                 BlockConectionHandling.saveScheme(selectedFile);
+                tabPane.getSelectionModel().getSelectedItem().setText(selectedFile.getName().replace(".blockies", ""));
             }
         }catch (IOException e){
             System.out.println(e);
@@ -150,27 +154,47 @@ public class MainWindowController {
             alert.showAndWait();
         }
     }
+    int tabNameIndex = 1;
     @FXML
     protected void changeScheme(){
         if (initialized == false) {return;}
         int index = 0;
         if(tabPane.getSelectionModel().getSelectedItem().isSelected()){
-            System.out.println("Selected tab: " + tabPane.getSelectionModel().getSelectedItem().getText());
             index = tabPane.getSelectionModel().getSelectedIndex();
             BlockConectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
         }
         else {return;}
         if(tabPane.getTabs().indexOf(addScheme) == index){
-            index += 1;
-            addTab(null, index);
+            /*index += 1;
+            addTab(null, index);*/
+            tabNameIndex++;
+            addTab(null, tabNameIndex);
         }
         calculateButton.toFront();
         startButton.toFront();
         stepButton.toFront();
+        deleteSchemeButton.toFront();
+    }
+    @FXML
+    protected void deleteScheme(){
+        //BlockConectionHandling.deleteScheme(tabPane.getSelectionModel().getSelectedItem().getText());
+        BlockConectionHandling.deleteScheme();
+        int tabIndex = tabPane.getSelectionModel().getSelectedIndex();
+        tabPane.getTabs().remove(tabIndex);
+
+        //Will select addTab - adds a new indexed tab
+        if(tabIndex == 0){tabPane.getSelectionModel().select(0);}
+        else{tabPane.getSelectionModel().select(tabIndex-1);}
+        BlockConectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
+
+        calculateButton.toFront();
+        startButton.toFront();
+        stepButton.toFront();
+        deleteSchemeButton.toFront();
     }
 
     private void addTab(String s, int index){
-        if(s == "" || s == null){s = "newScheme";}
+        if(s == null || s.equals("")){s = "newScheme";}
         Tab tab = new Tab(s + index);
         tab.setOnSelectionChanged(new EventHandler<Event>() {
             @Override
@@ -179,10 +203,8 @@ public class MainWindowController {
             }
         });
         BlockConectionHandling.addScheme(tab.getText());
-        tabPane.getTabs().add(tab);
-        tabPane.getTabs().remove(addScheme);
-        tabPane.getTabs().add(addScheme);
-        tabPane.getSelectionModel().select(index-1);
+        tabPane.getTabs().add(tabPane.getTabs().size()-1, tab);
+        tabPane.getSelectionModel().select(tabPane.getTabs().size()-2);//Starts with 0 -> -1 - 1
     }
     private void addTab(String s){
         if(s == "" || s == null){s = "newScheme";}
@@ -194,9 +216,7 @@ public class MainWindowController {
             }
         });
         BlockConectionHandling.addScheme(tab.getText());
-        tabPane.getTabs().add(tab);
-        tabPane.getTabs().remove(addScheme);
-        tabPane.getTabs().add(addScheme);
-        tabPane.getSelectionModel().select(tabPane.getTabs().size()-1);
+        tabPane.getTabs().add(tabPane.getTabs().size()-1 ,tab);
+        tabPane.getSelectionModel().select(tabPane.getTabs().size()-2);//Starts with 0 -> -1 - 1
     }
 }

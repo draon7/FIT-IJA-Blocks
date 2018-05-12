@@ -124,9 +124,8 @@ public final class BlockCreateUI {
                 Path pathIn = inPort.getPath();
 
                 if(pathIn.getElements().size() > 1){continue;}
-                System.out.println("Circle: " + inPort.getPortCircle().getParent());
                 end.setX(inPort.getPortCircle().getCenterX()+inPort.getPortCircle().getParent().getLayoutX());
-                end.setY(inPort.getPortCircle().getCenterX()+inPort.getPortCircle().getParent().getLayoutY());
+                end.setY(inPort.getPortCircle().getCenterY()+inPort.getPortCircle().getParent().getLayoutY());
 
                 Path path = outPort.getPath();
                 Circle circle = outPort.getPortCircle();
@@ -139,6 +138,7 @@ public final class BlockCreateUI {
                 CubicCurveTo curve = new CubicCurveTo();
                 BlockHandlers.calculateOutputCurve(curve, start, end);
                 path.getElements().add(curve);
+                path.toBack();
 
             }
         }
