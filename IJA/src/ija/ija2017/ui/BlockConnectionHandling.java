@@ -196,6 +196,7 @@ public class BlockConnectionHandling {
     public static void readScheme(File file) throws IOException {
         FileInputStream fin= new FileInputStream (file);
         ObjectInputStream ois = new ObjectInputStream(fin);
+        BlockConnectionHandling.clearScheme();
         Pane currentView = activeScheme.getView();
         try {
             activeScheme = (Scheme)ois.readObject();
@@ -262,6 +263,7 @@ public class BlockConnectionHandling {
      * Method deletes active scheme
      */
     public static void deleteScheme(){
+        clearScheme();
         schemes.remove(activeScheme);
     }
 

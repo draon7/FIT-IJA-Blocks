@@ -98,7 +98,6 @@ public class MainWindowController {
                     if(tab.getText().equals(selectedFile.getName().replace(".blockies", ""))){
                         System.out.println("Scheme already exists");
                         tabPane.getSelectionModel().select(tab);
-                        BlockConnectionHandling.clearScheme();
                         alreadyOpen = true;
                     }
                 }
