@@ -449,18 +449,31 @@ public class BlockConnectionHandling {
         return calculated;
     }
 
-
+    /**
+     * Method to calculate whole scheme
+     * @return returns true if calculation was successful return false if calculation failed
+     */
     public static boolean runScheme(){
         if(calculated == false) return false;
         activeScheme.calculate();
         return true;
     }
+
+    /**
+     * Method to move in scheme calculation by only one step
+     * @return returns true if calculation was successful return false if calculation failed
+     */
     public static boolean stepScheme(){
         if(calculated == false) return false;
         activeScheme.calculateOne();
         return true;
     }
 
+    /**
+     * Setts inputPort and tries to connect it
+     * @param port inputPort to be added and connected
+     * @return returns true if inputPort was connected successfully returns false of connection failed
+     */
     public static boolean setInput(InputPort port){
         inputPort = port;
         if(tryConnect()){
@@ -468,12 +481,40 @@ public class BlockConnectionHandling {
         }
         return false;
     }
+
+    /**
+     * Getter for inputPort
+     * @return returns inputPort reference
+     */
     public static InputPort getInput(){return inputPort;}
+
+    /**
+     * Setts inputPort to null
+     */
     public static void removeInput(){inputPort = null;}
+
+    /**
+     * Setts outputPort and tries to connect it
+     * @param port outputPort to be added and connected
+     * @return returns true if outputPort was connected successfully returns false of connection failed
+     */
     public static boolean setOutput(OutputPort port){outputPort = port; if(tryConnect()){return true;} return false;}
+
+    /**
+     * Getter for outputPort
+     * @return returns outputPort reference
+     */
     public static OutputPort getOutput(){return outputPort;}
+
+    /**
+     * Setts outputPort to null
+     */
     public static void removeOutput(){outputPort = null;}
 
+    /**
+     * Method that tries to connect port to another port
+     * @return returns true if port was successfully connected return false if connection failed
+     */
     private static boolean tryConnect(){
         calculated = false;
         if(inputPort != null && outputPort != null){
@@ -488,6 +529,11 @@ public class BlockConnectionHandling {
         }
         return false;
     }
+
+    /**
+     * Method that disconnects ports
+     * @param port reference to one of the ports to be disconnected
+     */
     public static void disconnect(AbstractPort port) {
         calculated = false;
         disableButtons();
