@@ -86,6 +86,7 @@ public class MainWindowController {
      */
     @FXML
     protected void readScheme(){
+        Boolean alreadyOpen = false;
         try{FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             fileChooser.getExtensionFilters().addAll(
@@ -93,7 +94,17 @@ public class MainWindowController {
             File selectedFile = fileChooser.showOpenDialog(mainViewPane.getScene().getWindow());
             if (selectedFile != null) {
                 //tabPane.getSelectionModel().select(addScheme);
-                addTab(selectedFile.getName().replace(".blockies", ""));
+                for(Tab tab : tabPane.getTabs()){
+                    if(tab.getText().equals(selectedFile.getName().replace(".blockies", ""))){
+                        System.out.println("Scheme already exists");
+                        tabPane.getSelectionModel().select(tab);
+                        BlockConnectionHandling.clearScheme();
+                        alreadyOpen = true;
+                    }
+                }
+                if(alreadyOpen == false){
+                    addTab(selectedFile.getName().replace(".blockies", ""));
+                }
                 BlockConnectionHandling.readScheme(selectedFile);
             }
         }catch (IOException e){
@@ -308,6 +319,17 @@ public class MainWindowController {
         if(result.isPresent())
         {
             String newName = result.get();
+            for(Tab tab : tabPane.getTabs()){
+                if(tab.getText().equals(newName)){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Name Conflict");
+                    alert.setContentText("The name you entered is already used!");
+                    alert.setHeaderText(null);
+                    alert.setGraphic(null);
+
+                    alert.showAndWait();
+                    return;}
+            }
             BlockConnectionHandling.renameScheme(newName);
             tabPane.getSelectionModel().getSelectedItem().setText(newName);
         }
