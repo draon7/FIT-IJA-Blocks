@@ -289,6 +289,8 @@ public class MainWindowController {
     protected void renameScheme(){
         TextInputDialog dialog = new TextInputDialog("new name");
         dialog.setTitle("rename");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
         dialog.setContentText("enter new name");
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent())
