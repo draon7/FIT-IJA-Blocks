@@ -40,7 +40,7 @@ public class MainWindowController {
      * Initialize window
      */
     public void initialize(){
-        BlockConnectionHandling.initialize(mainViewPane);
+        BlockConnectionHandling.initialize(mainViewPane, startButton, stepButton);
         addTab(null, 1);
         AnchorPane.setBottomAnchor(calculateButton,10d);
         AnchorPane.setBottomAnchor(startButton,10d);
@@ -51,6 +51,10 @@ public class MainWindowController {
         calculateButton.toFront();
         startButton.toFront();
         stepButton.toFront();
+        startButton.setTextFill(Color.RED);
+        stepButton.setTextFill(Color.RED);
+        startButton.setDisable(true);
+        stepButton.setDisable(true);
         deleteSchemeButton.toFront();
         setInitialized(true);
         alert.setTitle("Invalid scheme");
@@ -245,10 +249,10 @@ public class MainWindowController {
         deleteSchemeButton.toFront();
     }
 
-    /*@FXML
+    @FXML
     protected void clearScheme(){
         BlockConnectionHandling.clearScheme();
-    }*/
+    }
 
     /**
      * method to add tab to tab list

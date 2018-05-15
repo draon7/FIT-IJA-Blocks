@@ -19,9 +19,11 @@ import ija.ija2017.ui.widgets.AttackDataWidget;
 import ija.ija2017.ui.widgets.FighterDataWidget;
 import ija.ija2017.ui.widgets.WeaponDataWidget;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Rectangle;
@@ -38,6 +40,8 @@ public class BlockConnectionHandling {
     private static AttackDataWidget attackDataWidget;
     private static FighterDataWidget fighterDataWidget;
     private static WeaponDataWidget weaponDataWidget;
+    private static Button stepButton;
+    private static Button runButton;
 
     private static InputPort inputPort;
     private static OutputPort outputPort;
@@ -59,11 +63,26 @@ public class BlockConnectionHandling {
         BlockConnectionHandling.mainView = mainView;}
     public static AnchorPane getMainView() {return mainView;}
 
-    public static void initialize(AnchorPane view){
+    public static void initialize(AnchorPane view, Button runBut, Button stepBut){
         mainView = view;
         fighterDataWidget = new FighterDataWidget(mainView);
         attackDataWidget = new AttackDataWidget(mainView);
         weaponDataWidget = new WeaponDataWidget(mainView);
+        stepButton = stepBut;
+        runButton = runBut;
+    }
+
+    public static void disableButtons(){
+        runButton.setTextFill(Color.RED);
+        stepButton.setTextFill(Color.RED);
+        runButton.setDisable(true);
+        stepButton.setDisable(true);
+    }
+    public static void enableButtons(){
+        runButton.setTextFill(Color.color(0.15,0.15,0.15,1));
+        stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
+        runButton.setDisable(false);
+        stepButton.setDisable(false);
     }
 
     public static void showPortData(AbstractPort port){
@@ -125,6 +144,7 @@ public class BlockConnectionHandling {
     }
 
     public static void removeBlock(IBlock blockReference){
+        disableButtons();
         activeScheme.removeBlock(blockReference);
     }
 
@@ -163,6 +183,11 @@ public class BlockConnectionHandling {
         AnchorPane.setLeftAnchor(newScheme.getView(), 0d);
         getSchemes().add(newScheme);
         changeScheme(id);
+    }
+    public static void clearScheme(){
+        activeScheme.getView().getChildren().clear();
+        activeScheme.getBlockList().clear();
+        disableButtons();
     }
 
     public static void changeScheme(String id){
@@ -358,6 +383,8 @@ public class BlockConnectionHandling {
             blockUI.setStroke(BlockColors.blocStrokeColor);
         }
         calculated = activeScheme.calculateOrder();
+        if (calculated == true) {enableButtons();}
+        else {disableButtons();}
         return calculated;
     }
     public static boolean runScheme(){
@@ -393,12 +420,14 @@ public class BlockConnectionHandling {
             activeScheme.connectPorts(inputPort, outputPort);
             removeInput();
             removeOutput();
+            disableButtons();
             return true;
         }
         return false;
     }
     public static void disconnect(AbstractPort port) {
         calculated = false;
+        disableButtons();
         if (port instanceof OutputPort) {
             if (((OutputPort) port).getConnection() != null) {
                 activeScheme.disconnectPort(port);
