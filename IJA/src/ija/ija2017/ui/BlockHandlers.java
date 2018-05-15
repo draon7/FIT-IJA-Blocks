@@ -98,8 +98,9 @@ public class BlockHandlers {
         double deltaY = e.getSceneY() - blockReference.getPositionY();
         double newX = deltaX + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX();
         double newY = deltaY + blockReference.getBlock().getLayoutBounds().getMinY() + blockReference.getBlock().getLayoutY();
-        if(newX < 0)
-            newX = 0;
+        if(newX < 0){newX = 0;}
+        if(newY < 0){newY = 0;}
+
 
 
         MoveTo startPoint = new MoveTo();
