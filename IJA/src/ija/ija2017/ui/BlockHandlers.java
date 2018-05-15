@@ -44,7 +44,7 @@ public class BlockHandlers {
             circle.setOnMousePressed(event -> {
                 event.setDragDetect(true);
                 group.setMouseTransparent(true);
-                BlockHandlers.handlePortClicked(event, port, circle, pathStorage, 2,1);
+                BlockHandlers.handlePortClicked(event, port, circle, pathStorage);
             });
             circle.setOnMouseReleased(event -> {
                 group.setMouseTransparent(false);
@@ -69,6 +69,10 @@ public class BlockHandlers {
         }
     }
 
+    /**
+     * Adds mouse handlers to block base
+     * @param blockReference reference to block
+     */
     static void addMoveRemoveHandles(AbstractBlockUI blockReference){
         blockReference.getBlock().getChildren().get(0).setOnMousePressed(event -> {
             if(event.getButton() == MouseButton.SECONDARY){
@@ -87,10 +91,22 @@ public class BlockHandlers {
         });
     }
 
+    /**
+     * OnMousePressed block handle - resets mouse position
+     * @param e MouseEvent
+     * @param blockReference reference to block
+     */
     static void handleMoveStart(MouseEvent e, AbstractBlockUI blockReference){
         blockReference.setPositionX(e.getSceneX());
         blockReference.setPositionY(e.getSceneY());
     }
+
+    /**
+     * OnMouseDragged block handle - moves block and it's ports and paths
+     * @param e
+     * @param blockReference
+     * @param paths
+     */
     static void handleMoveDrag(MouseEvent e, AbstractBlockUI blockReference, ArrayList<Path> paths){
         List<InputPort> inputPorts = blockReference.getInputPorts();
         List<OutputPort> outputPorts = blockReference.getOutputPorts();
@@ -187,7 +203,15 @@ public class BlockHandlers {
             }
         });
     }
-    static void handlePortClicked(MouseEvent e, AbstractPort port, Circle circle, Path path, int numberOfPorts, int portIndex){
+
+    /**
+     * OnMouseClicked port handle - handles port disconnection and resets paths and also sets highlight of port and path
+     * @param e MouseEvent
+     * @param port  port to be handled
+     * @param circle portUI representation to be handled
+     * @param path path corresponding to port to be handled
+     */
+    static void handlePortClicked(MouseEvent e, AbstractPort port, Circle circle, Path path){
         if(port instanceof InputPort)   {
             if(((InputPort)port).getConnection() != null)  {
                 //port.getPath().getElements().clear();
@@ -200,7 +224,6 @@ public class BlockHandlers {
                 BlockConnectionHandling.disconnect(port);
             }
         }
-        // TODO: 06.05.2018 Disconnect
 
         path.setMouseTransparent(true);
         path.getElements().clear();
@@ -239,6 +262,13 @@ public class BlockHandlers {
         //if      (port instanceof InputPort) {BlockConnectionHandling.setInput((InputPort) port);}
         //else if (port instanceof OutputPort){BlockConnectionHandling.setOutput((OutputPort) port);}
     }
+
+    /**
+     * OnMouseReleased port handle - tries to connect port and resets the highlight of port and path
+     * @param port port to be handled
+     * @param circle portUI to be Highlighted
+     * @param path path to be Highlighted
+     */
     static void hanlePortReleased(AbstractPort port, Circle circle,Path path) {
         path.setMouseTransparent(false);
         path.toBack();
@@ -284,6 +314,13 @@ public class BlockHandlers {
         BlockConnectionHandling.removeInput();
         BlockConnectionHandling.removeOutput();
     }
+
+    /**
+     * OnMouseDragged port handler - moves path with mouse
+     * @param e MouseEvent
+     * @param blockReference reference to block
+     * @param port port to get path reference
+     */
     static void hanlePortDragged(MouseEvent e, AbstractBlockUI blockReference, AbstractPort port){
         Path path;
         path = port.getPath();
@@ -383,6 +420,12 @@ public class BlockHandlers {
         }
 
     }
+
+    /**
+     * OnMouseDragEntered port handler - handles port that is entered during mouse drag
+     * @param port port to be handled
+     * @param circle portUI to be Highlighted
+     */
     public static void handlePortDragEntered(AbstractPort port, Circle circle) {
         switch (port.getDataType()){
             case attack:{
@@ -404,6 +447,12 @@ public class BlockHandlers {
         if      (port instanceof InputPort) BlockConnectionHandling.setInput((InputPort)port);
         else if (port instanceof OutputPort) BlockConnectionHandling.setOutput((OutputPort)port);
     }
+
+    /**
+     * OnMouseDragExited port handler - handles port that is exited during mouse drag
+     * @param port port to be handled
+     * @param circle portUI to be reset
+     */
     public static void handlePortDragExited(AbstractPort port, Circle circle) {
         switch (port.getDataType()){
         case attack:{
@@ -425,21 +474,53 @@ public class BlockHandlers {
         if      (port instanceof InputPort) BlockConnectionHandling.removeInput();
         else if (port instanceof OutputPort) BlockConnectionHandling.removeOutput();
     }
+    /**
+     * OnMouseDragRelease port handler - handles port where mouse is released during mouse drag
+     * @param port port to be handled
+     */
     public static void handlePortDragReleased(MouseEvent e, AbstractPort port, Path path){}
+
+    /**
+     * Helper function that deletes path of port
+     * @param p port that contains path that is to be deleted
+     */
     private static void deletePath(Path p){p.getElements().clear();}
 
+    /**
+     * OnMouseEntered port handler - shows data view in port and sets highlight to portUI and path that is hovered
+     * @param port port from where the data will be displayed
+     * @param path path to be Highlighted
+     */
     public static void handlePortEntered(AbstractPort port, Path path)  {
         path.setStroke(BlockColors.strokeHoverColor); path.toFront();
         BlockConnectionHandling.showPortData(port);
     }
+    /**
+     * OnMouseExited port handler - hides data view in port and sets highlight to portUI and path that is hovered
+     * @param path path highlight to be reset
+     */
     public static void handlePortExited(Path path)   {
         path.setStroke(BlockColors.strokeColor); path.toBack();
         BlockConnectionHandling.hidePortData();
     }
 
+    /**
+     * OnMouseEntered path handler - Highlights path that is hovered
+     * @param path path to be Highlighted
+     */
     public static void handlePathEntered(Path path)  {path.setStroke(BlockColors.strokeHoverColor);  path.toFront();}
+    /**
+     * OnMouseExited path handler - resets Highlights of path that is exited
+     * @param path path highlight to be reset
+     */
     public static void handlePathExited(Path path)   {path.setStroke(BlockColors.strokeColor);   path.toBack();}
 
+    /**
+     * Helper method for calculating curve between 2 ports, that starts from output port
+     * @param curve current curve reference
+     * @param start curve start point
+     * @param end   curve end point
+     */
     public static void calculateOutputCurve(CubicCurveTo curve, MoveTo start, MoveTo end){
         System.out.println("Start: " + start + "|End: " + end);
 
@@ -472,6 +553,12 @@ public class BlockHandlers {
 
         }
     }
+    /**
+     * Helper method for calculating curve between 2 ports, that starts from input port
+     * @param curve current curve reference
+     * @param start curve start point
+     * @param end   curve end point
+     */
     public static void calculateInputCurve(CubicCurveTo curve, MoveTo start, MoveTo end){
         System.out.println("Start: " + start + "|End: " + end);
 
