@@ -28,6 +28,11 @@ public class Scheme implements Serializable {
     private List<IBlock> blockList = new ArrayList<IBlock>();
     private List<IBlock> orderBlockList = new ArrayList<IBlock>();
 
+    /**
+     * Method for class serialization
+     * @param stream stream to serialize to
+     * @throws IOException IO error
+     */
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         stream.writeObject(name);
@@ -35,6 +40,12 @@ public class Scheme implements Serializable {
         stream.writeObject(orderBlockList);
     }
 
+    /**
+     * Method for class deserialization
+     * @param stream stream to deserialize from
+     * @throws IOException IO error
+     * @throws ClassNotFoundException class not found
+     */
     private void readObject(java.io.ObjectInputStream stream)
             throws IOException, ClassNotFoundException {
         name = (String) stream.readObject();

@@ -96,6 +96,10 @@ public class BlockConnectionHandling {
         stepButton.setDisable(false);
     }
 
+    /**
+     * Method for showing data in port
+     * @param port port to show
+     */
     public static void showPortData(AbstractPort port){
         MoveTo pos = new MoveTo();
         Circle portCircle;
@@ -123,12 +127,20 @@ public class BlockConnectionHandling {
             }
         }
     }
+
+    /**
+     * Method hides port widget
+     */
     public static void hidePortData(){
         fighterDataWidget.hide();
         attackDataWidget.hide();
         weaponDataWidget.hide();
     }
 
+    /**
+     * Method creates block
+     * @param s type of block
+     */
     public static void createBlock(String s){
         switch (s){
             case("attack"):{
@@ -154,11 +166,20 @@ public class BlockConnectionHandling {
         }
     }
 
+    /**
+     * Method removes block from scheme
+     * @param blockReference reference to block
+     */
     public static void removeBlock(IBlock blockReference){
         disableButtons();
         activeScheme.removeBlock(blockReference);
     }
 
+    /**
+     * method for saving scheme
+     * @param file file to save scheme to
+     * @throws IOException IO error
+     */
     public static void saveScheme(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -166,6 +187,12 @@ public class BlockConnectionHandling {
         oos.writeObject(activeScheme);
         oos.close();
     }
+
+    /**
+     * Reads scheme from file
+     * @param file file read from
+     * @throws IOException IO error
+     */
     public static void readScheme(File file) throws IOException {
         FileInputStream fin= new FileInputStream (file);
         ObjectInputStream ois = new ObjectInputStream(fin);
@@ -185,6 +212,10 @@ public class BlockConnectionHandling {
         fin.close();
     }
 
+    /**
+     * Method to add new scheme
+     * @param id name of scheme
+     */
     public static void addScheme(String id){
         Scheme newScheme = new Scheme(id);
         getMainView().getChildren().add(newScheme.getView());
@@ -195,12 +226,20 @@ public class BlockConnectionHandling {
         getSchemes().add(newScheme);
         changeScheme(id);
     }
+
+    /**
+     * Method clears scheme
+     */
     public static void clearScheme(){
         activeScheme.getView().getChildren().clear();
         activeScheme.getBlockList().clear();
         disableButtons();
     }
 
+    /**
+     * Method changes active scheme
+     * @param id name of scheme
+     */
     public static void changeScheme(String id){
         for (Scheme scheme : getSchemes()) {
             if(scheme.getName().equals(id)){
@@ -211,14 +250,25 @@ public class BlockConnectionHandling {
         }
     }
 
+    /**
+     * Method renames active scheme
+     * @param name name to rename to
+     */
     public static void renameScheme(String name){
         activeScheme.setName(name);
     }
 
+    /**
+     * Method deletes active scheme
+     */
     public static void deleteScheme(){
         schemes.remove(activeScheme);
     }
 
+    /**
+     * Method calculates scheme order
+     * @return true if ok otherwise false
+     */
     public static boolean calculateScheme(){
         if(activeScheme.getPreviousBlock() != null){
             activeScheme.getPreviousBlock().setStroke(BlockColors.blocStrokeColor);
@@ -398,6 +448,8 @@ public class BlockConnectionHandling {
         else {disableButtons();}
         return calculated;
     }
+
+
     public static boolean runScheme(){
         if(calculated == false) return false;
         activeScheme.calculate();
