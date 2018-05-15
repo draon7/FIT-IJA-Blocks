@@ -2,6 +2,9 @@ package ija.ija2017.ui;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Class for definiton of colors
+ */
 public final class BlockColors {
     public final static Color blockFillColor = (Color.color(0.2f,0.2f,0.2f));
     public final static Color blockFillHoverColor = (Color.color(0.25f,0.25f,0.25f));

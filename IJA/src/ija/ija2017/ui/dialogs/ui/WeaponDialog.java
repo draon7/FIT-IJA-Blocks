@@ -12,12 +12,19 @@ import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
+/**
+ * Class representing weapon dialog
+ */
 public class WeaponDialog {
     private Dialog<DataWeaponDialog> weaponDialog;
     private DialogPane dialogPane;
     private TextField handlingField;
     private TextField weightField;
 
+    /**
+     * Constructor for the class, it creates dialog, sets its title
+     * and creates result converter
+     */
     public WeaponDialog(){
         weaponDialog = new Dialog<>();
         weaponDialog.setTitle("Weapon");
@@ -37,35 +44,53 @@ public class WeaponDialog {
         });
     }
 
+    /**
+     * Method shows dialog unlocks fields and waits for input
+     * @return inputed data
+     */
     public DataWeaponDialog showAndWait(){
         handlingField.clear();
         weightField.clear();
         Optional<DataWeaponDialog> newData = weaponDialog.showAndWait();
-        unlockAttackField();
+        unlockWeaponField();
         if(newData.isPresent()){
             return newData.get();
         }
         return null;
     }
 
+    /**
+     * Method lock all input fields
+     */
     public void lockAttackField(){
         handlingField.setEditable(false);
         weightField.setEditable(false);
         handlingField.setPromptText("Connected");
         weightField.setPromptText("Connected");
     }
-    public void unlockAttackField(){
+
+    /**
+     * Method unlocks all input fields
+     */
+    public void unlockWeaponField(){
         handlingField.setEditable(true);
         handlingField.setPromptText("Handling");
         weightField.setEditable(true);
         weightField.setPromptText("Weight");
     }
 
+    /**
+     * Method clears all data in dialog
+     */
     private void clearData(){
         handlingField.setText("");
         weightField.setText("");
     }
 
+    /**
+     * Method creates dialogs UI as group
+     * @return group representing dialog
+     */
     private Node createUI(){
         Group group = new Group();
 

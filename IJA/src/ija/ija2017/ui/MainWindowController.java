@@ -3,8 +3,6 @@ package ija.ija2017.ui;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -12,11 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.util.Optional;
 
-
+/**
+ * Class with main window controllers
+ */
 public class MainWindowController {
 
 
@@ -37,8 +36,11 @@ public class MainWindowController {
     private void setInitialized(boolean value){initialized = value;}
 
     @FXML
+    /**
+     * Initialize window
+     */
     public void initialize(){
-        BlockConectionHandling.initialize(mainViewPane);
+        BlockConnectionHandling.initialize(mainViewPane);
         addTab(null, 1);
         AnchorPane.setBottomAnchor(calculateButton,10d);
         AnchorPane.setBottomAnchor(startButton,10d);
@@ -55,6 +57,9 @@ public class MainWindowController {
         alert.setHeaderText("There is mistake in your scheme!");
     }
 
+    /**
+     * Method saves scheme
+     */
     @FXML
     protected void saveScheme(){
         try{
@@ -64,13 +69,17 @@ public class MainWindowController {
                     new FileChooser.ExtensionFilter("Blocky Files", "*.blockies"));
             File selectedFile = fileChooser.showSaveDialog(mainViewPane.getScene().getWindow());
             if (selectedFile != null) {
-                BlockConectionHandling.saveScheme(selectedFile);
+                BlockConnectionHandling.saveScheme(selectedFile);
                 tabPane.getSelectionModel().getSelectedItem().setText(selectedFile.getName().replace(".blockies", ""));
             }
         }catch (IOException e){
             System.out.println(e);
         }
     }
+
+    /**
+     * Method reads saved scheme
+     */
     @FXML
     protected void readScheme(){
         try{FileChooser fileChooser = new FileChooser();
@@ -81,41 +90,69 @@ public class MainWindowController {
             if (selectedFile != null) {
                 //tabPane.getSelectionModel().select(addScheme);
                 addTab(selectedFile.getName().replace(".blockies", ""));
-                BlockConectionHandling.readScheme(selectedFile);
+                BlockConnectionHandling.readScheme(selectedFile);
             }
         }catch (IOException e){
             System.out.println(e);
         }
     }
 
+    /**
+     * Method on click Block Attack, creates block
+     * @param e mouse event
+     */
     @FXML
     protected void createBlockAttack(MouseEvent e){
-        BlockConectionHandling.createBlock("attack");
+        BlockConnectionHandling.createBlock("attack");
         //BlockAttackUI blockAttack = new BlockAttackUI(mainViewPane);
     }
+
+    /**
+     * Method on click Block Defense, creates block
+     * @param e mouse event
+     */
     @FXML
     protected void createBlockDefense(MouseEvent e){
-        BlockConectionHandling.createBlock("defense");
+        BlockConnectionHandling.createBlock("defense");
         //BlockDefenseUI blockDefense = new BlockDefenseUI(mainViewPane);
     }
+
+    /**
+     * Method on click Block Healing, creates block
+     * @param e mouse event
+     */
     @FXML
     protected void createBlockHealing(MouseEvent e){
-        BlockConectionHandling.createBlock("healing");
+        BlockConnectionHandling.createBlock("healing");
         //BlockHealingUI blockHealing = new BlockHealingUI(mainViewPane);
     }
+
+    /**
+     * Method on click Block Training, creates block
+     * @param e mouse event
+     */
     @FXML
     protected void createBlockTraining(MouseEvent e){
-        BlockConectionHandling.createBlock("training");
+        BlockConnectionHandling.createBlock("training");
         //BlockTrainingUI blockTraining = new BlockTrainingUI(mainViewPane);
     }
+
+    /**
+     * Method on click Block Weapon Upgrade, creates block
+     * @param e mouse event
+     */
     @FXML
     protected void createBlockWeaponUpgrade(MouseEvent e){
-        BlockConectionHandling.createBlock("upgrade");
+        BlockConnectionHandling.createBlock("upgrade");
         //BlockWeaponUpgradeUI blockWeaponUpgrade = new BlockWeaponUpgradeUI(mainViewPane);
     }
+
+    /**
+     * Method on click calculate scheme, calculates order of scheme
+     */
     @FXML
     protected void calculateScheme(){
-        if(BlockConectionHandling.calculateScheme()){
+        if(BlockConnectionHandling.calculateScheme()){
             startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
             stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
             startButton.setDisable(false);
@@ -128,9 +165,13 @@ public class MainWindowController {
             alert.showAndWait();
         }
     }
+
+    /**
+     * Method on click check, calculates whole result
+     */
     @FXML
     protected void runScheme(){
-        if(BlockConectionHandling.runScheme()){
+        if(BlockConnectionHandling.runScheme()){
             startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
             stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
         }else{
@@ -141,9 +182,13 @@ public class MainWindowController {
             alert.showAndWait();
         }
     }
+
+    /**
+     * Method on click step, calculates one step
+     */
     @FXML
     protected void stepScheme(){
-        if(BlockConectionHandling.stepScheme()) {
+        if(BlockConnectionHandling.stepScheme()) {
             startButton.setTextFill(Color.color(0.15,0.15,0.15,1));
             stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));
         }else{
@@ -154,6 +199,9 @@ public class MainWindowController {
             alert.showAndWait();
         }
     }
+    /**
+     * Method to select scheme from tabs
+     */
     int tabNameIndex = 1;
     @FXML
     protected void changeScheme(){
@@ -161,7 +209,7 @@ public class MainWindowController {
         int index = 0;
         if(tabPane.getSelectionModel().getSelectedItem().isSelected()){
             index = tabPane.getSelectionModel().getSelectedIndex();
-            BlockConectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
+            BlockConnectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
         }
         else {return;}
         if(tabPane.getTabs().indexOf(addScheme) == index){
@@ -175,17 +223,21 @@ public class MainWindowController {
         stepButton.toFront();
         deleteSchemeButton.toFront();
     }
+
+    /**
+     * Method to delete scheme
+     */
     @FXML
     protected void deleteScheme(){
-        //BlockConectionHandling.deleteScheme(tabPane.getSelectionModel().getSelectedItem().getText());
-        BlockConectionHandling.deleteScheme();
+        //BlockConnectionHandling.deleteScheme(tabPane.getSelectionModel().getSelectedItem().getText());
+        BlockConnectionHandling.deleteScheme();
         int tabIndex = tabPane.getSelectionModel().getSelectedIndex();
         tabPane.getTabs().remove(tabIndex);
 
         //Will select addTab - adds a new indexed tab
         if(tabIndex == 0){tabPane.getSelectionModel().select(0);}
         else{tabPane.getSelectionModel().select(tabIndex-1);}
-        BlockConectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
+        BlockConnectionHandling.changeScheme(tabPane.getSelectionModel().getSelectedItem().getText());
 
         calculateButton.toFront();
         startButton.toFront();
@@ -193,6 +245,11 @@ public class MainWindowController {
         deleteSchemeButton.toFront();
     }
 
+    /**
+     * method to add tab to tab list
+     * @param s name of tab item
+     * @param index index to add to end of string
+     */
     private void addTab(String s, int index){
         if(s == null || s.equals("")){s = "newScheme";}
         Tab tab = new Tab(s + index);
@@ -202,10 +259,15 @@ public class MainWindowController {
                 changeScheme();
             }
         });
-        BlockConectionHandling.addScheme(tab.getText());
+        BlockConnectionHandling.addScheme(tab.getText());
         tabPane.getTabs().add(tabPane.getTabs().size()-1, tab);
         tabPane.getSelectionModel().select(tabPane.getTabs().size()-2);//Starts with 0 -> -1 - 1
     }
+
+    /**
+     * add Tab to end of tab list
+     * @param s name of tab
+     */
     private void addTab(String s){
         if(s == "" || s == null){s = "newScheme";}
         Tab tab = new Tab(s);
@@ -215,8 +277,33 @@ public class MainWindowController {
                 changeScheme();
             }
         });
-        BlockConectionHandling.addScheme(tab.getText());
+        BlockConnectionHandling.addScheme(tab.getText());
         tabPane.getTabs().add(tabPane.getTabs().size()-1 ,tab);
         tabPane.getSelectionModel().select(tabPane.getTabs().size()-2);//Starts with 0 -> -1 - 1
+    }
+
+    /**
+     * Method renames scheme
+     */
+    @FXML
+    protected void renameScheme(){
+        TextInputDialog dialog = new TextInputDialog("new name");
+        dialog.setTitle("rename");
+        dialog.setContentText("enter new name");
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent())
+        {
+            String newName = result.get();
+            BlockConnectionHandling.renameScheme(newName);
+            tabPane.getSelectionModel().getSelectedItem().setText(newName);
+        }
+    }
+
+    /**
+     * Method adds new scheme
+     */
+    @FXML
+    protected void addNew(){
+        tabPane.getSelectionModel().select(tabPane.getTabs().size()-1);
     }
 }

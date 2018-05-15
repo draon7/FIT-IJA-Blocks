@@ -62,7 +62,8 @@ public class Scheme implements Serializable {
     }
 
     /**
-     * sets name of the schemee
+     * sets name of the scheme
+     * @param name name of the scheme
      */
     public void setName(String name) {this.name = name;}
 

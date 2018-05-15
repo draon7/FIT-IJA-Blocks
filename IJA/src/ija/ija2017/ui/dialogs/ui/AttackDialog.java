@@ -11,11 +11,18 @@ import javafx.scene.control.TextField;
 
 import java.util.Optional;
 
+/**
+ * Class for Attack Dialog
+ */
 public class AttackDialog {
     private Dialog<DataAttackDialog> attackDialog;
     private DialogPane dialogPane;
     private TextField attackField;
 
+    /**
+     * Attack dialog constructor, creates new dialog,
+     * sets title and sets converter
+     */
     public AttackDialog(){
         attackDialog = new Dialog<>();
         attackDialog.setTitle("Attack Input");
@@ -34,6 +41,10 @@ public class AttackDialog {
         });
     }
 
+    /**
+     * Method shows dialog and waits, it unlocks all input  fields
+     * @return entered data to dialog
+     */
     public DataAttackDialog showAndWait(){
         attackField.clear();
         Optional<DataAttackDialog> newData = attackDialog.showAndWait();
@@ -44,19 +55,33 @@ public class AttackDialog {
         return null;
     }
 
+    /**
+     * Method locks input field
+     */
     public void lockAttackField(){
         attackField.setEditable(false);
         attackField.setPromptText("Connected");
     }
+
+    /**
+     * Method unlocks input field
+     */
     public void unlockAttackField(){
         attackField.setEditable(true);
         attackField.setPromptText("AttackPower");
     }
 
+    /**
+     * Method clears input field
+     */
     private void clearData(){
         attackField.setText("");
     }
 
+    /**
+     * Method creates UI, it sets description and sets its alignment
+     * @return group representing dialog
+     */
     private Node createUI(){
         Group group = new Group();
 

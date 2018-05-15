@@ -7,9 +7,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
-
+/**
+ * Class for creation of defense block
+ */
 public class BlockDefenseUI extends BlockDefense implements BlockUI {
-
+    /**
+     * Creates DefenseUI
+     * @param pane pane parent
+     */
     public BlockDefenseUI(Pane pane){
         setParent(pane);
         CreateBlockUI();

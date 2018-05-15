@@ -10,6 +10,9 @@ import javafx.scene.shape.Path;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Class used for UI creation of block
+ */
 public abstract class AbstractBlockUI extends AbstractBlock {
     private double positionX;
     private double positionY;
@@ -22,6 +25,11 @@ public abstract class AbstractBlockUI extends AbstractBlock {
 
     public AbstractBlockUI(){}
 
+    /**
+     * Method for serialization
+     * @param stream to write to
+     * @throws IOException IO error
+     */
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         stream.writeDouble(positionX);
@@ -30,6 +38,12 @@ public abstract class AbstractBlockUI extends AbstractBlock {
         stream.writeDouble(lastPositionY);
     }
 
+    /**
+     * Method for deserialization
+     * @param stream stream to read from
+     * @throws IOException IO error
+     * @throws ClassNotFoundException class does not exist
+     */
     private void readObject(java.io.ObjectInputStream stream)
             throws IOException, ClassNotFoundException {
         positionX = stream.readDouble();
@@ -40,7 +54,16 @@ public abstract class AbstractBlockUI extends AbstractBlock {
         portPathList = new ArrayList<Path>();
     }
 
+    /**
+     * Pane parent getter
+     * @return pane parent
+     */
     public Pane getParent() {return parent;}
+
+    /**
+     * Pane parent setter
+     * @param parent pane parent
+     */
     public void setParent(Pane parent) {this.parent = parent;}
 
 
@@ -61,7 +84,7 @@ public abstract class AbstractBlockUI extends AbstractBlock {
 
     /**
      * setter for list of circles
-     * @param portList
+     * @param portList list of ports
      */
     public void setPortList(ArrayList<Circle> portList) {
         this.portList = portList;
@@ -69,7 +92,7 @@ public abstract class AbstractBlockUI extends AbstractBlock {
 
     /**
      * getter for list of paths
-     * @return
+     * @return list of paths
      */
     public ArrayList<Path> getPortPathList() {
         return portPathList;
@@ -136,16 +159,26 @@ public abstract class AbstractBlockUI extends AbstractBlock {
     public void setPositionY(double positionY) {
         this.positionY = positionY;
     }
+
+    /**
+     * Last X position setter
+     * @param lastPositionX X position of block
+     */
     public void setLastPositionX(double lastPositionX) {
         this.lastPositionX = lastPositionX;
     }
-    
+
+    /**
+     * Last Y position setter
+     * @param lastPositionY Y position of the block
+     */
     public void setLastPositionY(double lastPositionY) {
         this.lastPositionY = lastPositionY;
     }
 
     /**
      * Method to call when scheme is reloaded
+     * @param parent parent pane
      */
     public void reloadBlock(Pane parent){
         setParent(parent);
@@ -156,6 +189,10 @@ public abstract class AbstractBlockUI extends AbstractBlock {
         System.out.println("LastX: " + lastPositionX + " |LastY: " + lastPositionY);
         block.relocate(lastPositionX, lastPositionY);
     }
+
+    /**
+     * Method for reloading Paths from block
+     */
     public void reloadConnectionUI(){
         BlockCreateUI.ReloadPaths(this);
     }

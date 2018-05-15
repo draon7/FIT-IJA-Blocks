@@ -1,6 +1,5 @@
 package ija.ija2017.ui;
 
-import ija.ija2017.Data.AbstractData;
 import ija.ija2017.Data.DataAttack;
 import ija.ija2017.Data.DataFighter;
 import ija.ija2017.Data.DataWeapon;
@@ -19,21 +18,22 @@ import ija.ija2017.ui.dialogs.ui.WeaponDialog;
 import ija.ija2017.ui.widgets.AttackDataWidget;
 import ija.ija2017.ui.widgets.FighterDataWidget;
 import ija.ija2017.ui.widgets.WeaponDataWidget;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 
 import java.io.*;
 import java.util.ArrayList;
 
-public class BlockConectionHandling {
-    private static BlockConectionHandling self = new BlockConectionHandling();
+/**
+ * Class for handling connection of ports
+ */
+public class BlockConnectionHandling {
+    private static BlockConnectionHandling self = new BlockConnectionHandling();
 
     private static AttackDataWidget attackDataWidget;
     private static FighterDataWidget fighterDataWidget;
@@ -48,13 +48,15 @@ public class BlockConectionHandling {
 
     private static boolean calculated = false;
 
+    /**
+     * getter of schemes
+     * @return list of schemes
+     */
     public static ArrayList<Scheme> getSchemes() {return schemes;}
-    public static void setSchemes(ArrayList<Scheme> schemes) {BlockConectionHandling.schemes = schemes;}
 
-    public static BlockConectionHandling getSelf(){
-        return self;
-    }
-    public static void setMainView(AnchorPane mainView){BlockConectionHandling.mainView = mainView;}
+
+    public static void setMainView(AnchorPane mainView){
+        BlockConnectionHandling.mainView = mainView;}
     public static AnchorPane getMainView() {return mainView;}
 
     public static void initialize(AnchorPane view){
@@ -176,6 +178,7 @@ public class BlockConectionHandling {
     public static void renameScheme(String name){
         activeScheme.setName(name);
     }
+
     public static void deleteScheme(){
         schemes.remove(activeScheme);
     }
@@ -354,14 +357,8 @@ public class BlockConectionHandling {
             blockUI.setFill(BlockColors.blockFillColor);
             blockUI.setStroke(BlockColors.blocStrokeColor);
         }
-        if(activeScheme.calculateOrder()) {
-            calculated = true;
-            return true;
-        }
-        else{
-            calculated = false;
-            return false;
-        }
+        calculated = activeScheme.calculateOrder();
+        return calculated;
     }
     public static boolean runScheme(){
         if(calculated == false) return false;

@@ -7,9 +7,15 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
-
+/**
+ * Class for creation of training block
+ */
 public class BlockTrainingUI extends BlockTraining implements BlockUI {
 
+    /**
+     * Creates TrainingUI
+     * @param pane pane parent
+     */
     public BlockTrainingUI(Pane pane){
         setParent(pane);
         CreateBlockUI();

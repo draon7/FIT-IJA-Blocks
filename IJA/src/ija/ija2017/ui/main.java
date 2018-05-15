@@ -11,6 +11,11 @@ public class main extends Application{
         launch(args);
     }
 
+    /**
+     * Class start app and GUI
+     * @param stage parameters of window
+     * @throws Exception error
+     */
     @Override
     public void start(Stage stage) throws  Exception{
         stage.setTitle("BlockyView");

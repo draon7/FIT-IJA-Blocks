@@ -24,12 +24,24 @@ public abstract class AbstractPort implements Serializable {
         path.setStroke(Color.color(0.15,0.15,0.15,1));
         portCircle = new Circle();
     }
+
+    /**
+     * Method for block serialization
+     * @param stream to write
+     * @throws IOException IO error
+     */
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         stream.writeObject(data);
         stream.writeBoolean(isReady);
     }
 
+    /**
+     * Method for Object deserialization
+     * @param stream stream to read from
+     * @throws IOException IO error
+     * @throws ClassNotFoundException Class not found
+     */
     private void readObject(java.io.ObjectInputStream stream)
             throws IOException, ClassNotFoundException {
         data = (AbstractData) stream.readObject();
@@ -91,7 +103,16 @@ public abstract class AbstractPort implements Serializable {
      */
     public void setPath(Path path) {this.path = path;}
 
+    /**
+     * Port circle getter
+     * @return circle representing port
+     */
     public Circle getPortCircle() {return portCircle;}
+
+    /**
+     * Port circle setter
+     * @param portCircle circle representing port
+     */
     public void setPortCircle(Circle portCircle) {this.portCircle = portCircle;}
 
 

@@ -18,10 +18,15 @@ import javafx.scene.text.FontWeight;
 
 import java.util.List;
 
-
+/**
+ * Class with methods for creating Block UI
+ */
 public final class BlockCreateUI {
 
-
+    /**
+     * UI constructor
+     * @param blockReference reference to Block to create
+     */
     public static void CreateBlockUI(AbstractBlockUI blockReference){
 
         Rectangle rect = createRectangle();
@@ -49,6 +54,10 @@ public final class BlockCreateUI {
         blockReference.setBlock(block);
     }
 
+    /**
+     * Creates ports in Block and declares paths for ports
+     * @param blockReference block to create path around
+     */
     public static void CreatePortPathUI(AbstractBlockUI blockReference){
         Pane parent = blockReference.getParent();
         Group block = blockReference.getBlock();
@@ -120,6 +129,10 @@ public final class BlockCreateUI {
         });
     }
 
+    /**
+     * Creates paths when reloaded
+     * @param blockReference reference to block
+     */
     public static void ReloadPaths(AbstractBlockUI blockReference){
         MoveTo start = new MoveTo();
         MoveTo end = new MoveTo();
@@ -172,6 +185,10 @@ public final class BlockCreateUI {
         }
     }
 
+    /**
+     * Creates rectangle representing block
+     * @return rectangle around block
+     */
     public static Rectangle createRectangle(){
         Rectangle rect = new Rectangle();
         rect.setHeight(75);
@@ -180,6 +197,13 @@ public final class BlockCreateUI {
         rect.setStroke(Color.color(0.1,0.1,0.1,1));
         return rect;
     }
+
+    /**
+     * Method creates text description in block
+     * @param s string to wrire
+     * @param rect rectangle to fit text in
+     * @return Label for block
+     */
     public static Label createText(String s, Rectangle rect){
         Label text = new Label(s);
         text.setFont(Font.font("System", FontWeight.BOLD, 12));
@@ -190,6 +214,15 @@ public final class BlockCreateUI {
         text.setMouseTransparent(true);
         return text;
     }
+
+    /**
+     * Method creates circle for port representation
+     * @param widthModifier position in rectangle
+     * @param heightModifier position in rectangle
+     * @param rect rectangle to create circle in
+     * @param portColor colour of the circle
+     * @return circle
+     */
     public static Circle createCircle(float widthModifier, float heightModifier, Rectangle rect, Color portColor){
         return new Circle(rect.getX()+(rect.getWidth()*widthModifier), rect.getY()+(rect.getHeight()*heightModifier), BlockColors.circleRadius, portColor);//Color.ORANGE
     }

@@ -12,24 +12,31 @@ import javafx.scene.layout.VBox;
 
 import java.util.Optional;
 
+/**
+ * Class representing dialog for entering FighterData
+ */
 public class FighterDialog {
-    private Dialog<DataFighterDialog> weaponDialog;
+    private Dialog<DataFighterDialog> fighterDialog;
     private DialogPane dialogPane;
     private TextField healthField;
     private TextField powerField;
     private TextField dexterityField;
     private TextField intelligenceField;
 
+    /**
+     * Constructor for FighterDialog, it creates new dialog, sets title
+     * and result converter
+     */
     public FighterDialog(){
-        weaponDialog = new Dialog<>();
-        weaponDialog.setTitle("Fighter");
-        dialogPane = weaponDialog.getDialogPane();
+        fighterDialog = new Dialog<>();
+        fighterDialog.setTitle("Fighter");
+        dialogPane = fighterDialog.getDialogPane();
         dialogPane.getButtonTypes().addAll(ButtonType.APPLY);
 
         Node ui = createUI();
         dialogPane.setContent(ui);
 
-        weaponDialog.setResultConverter((ButtonType button) -> {
+        fighterDialog.setResultConverter((ButtonType button) -> {
             if(healthField.getText().isEmpty())return null;
             if(powerField.getText().isEmpty())return null;
             if(dexterityField.getText().isEmpty())return null;
@@ -45,19 +52,26 @@ public class FighterDialog {
         });
     }
 
+    /**
+     * Class shows dialog and waits for data
+     * @return returns entered data
+     */
     public DataFighterDialog showAndWait(){
         healthField.clear();
         powerField.clear();
         dexterityField.clear();
         intelligenceField.clear();
-        Optional<DataFighterDialog> newData = weaponDialog.showAndWait();
-        unlockAttackField();
+        Optional<DataFighterDialog> newData = fighterDialog.showAndWait();
+        unlockFighterField();
         if(newData.isPresent()){
             return newData.get();
         }
         return null;
     }
 
+    /**
+     * Class for locking input fields
+     */
     public void lockAttackField(){
         healthField.setEditable(false);
         powerField.setEditable(false);
@@ -68,7 +82,11 @@ public class FighterDialog {
         dexterityField.setPromptText("Connected");
         intelligenceField.setPromptText("Connected");
     }
-    public void unlockAttackField(){
+
+    /**
+     * Method unlock fighter field
+     */
+    public void unlockFighterField(){
         healthField.setEditable(true);
         powerField.setEditable(true);
         dexterityField.setEditable(true);
@@ -79,6 +97,9 @@ public class FighterDialog {
         intelligenceField.setPromptText("Intelligence");
     }
 
+    /**
+     * Method clears data in fields
+     */
     private void clearData(){
         healthField.setText("");
         powerField.setText("");
@@ -86,6 +107,10 @@ public class FighterDialog {
         intelligenceField.setText("");
     }
 
+    /**
+     * Method Creates UI and returns it as group
+     * @return group representing ui of dialog
+     */
     private Node createUI(){
         Group group = new Group();
 

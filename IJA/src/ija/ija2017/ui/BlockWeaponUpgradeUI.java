@@ -7,9 +7,15 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Path;
-
+/**
+ * Class for creation of weapon upgrade block
+ */
 public class BlockWeaponUpgradeUI extends BlockWeaponUpgrade implements BlockUI {
 
+    /**
+     * Creates WeaponUpgradeUI
+     * @param pane pane parent
+     */
     public BlockWeaponUpgradeUI(Pane pane){
         setParent(pane);
         CreateBlockUI();

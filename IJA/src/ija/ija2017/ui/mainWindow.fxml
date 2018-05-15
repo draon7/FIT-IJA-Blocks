@@ -21,14 +21,15 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="New" />
+                        <MenuItem mnemonicParsing="false" onAction="#addNew" text="New" />
                         <MenuItem fx:id="saveButton" mnemonicParsing="false" onAction="#saveScheme" text="Save" />
                     <MenuItem fx:id="readButton" mnemonicParsing="false" onAction="#readScheme" text="Open" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
+                    <MenuItem mnemonicParsing="false" onAction="#deleteScheme" text="Delete" />
+                        <MenuItem mnemonicParsing="false" onAction="#renameScheme" text="Rename" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
