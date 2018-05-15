@@ -249,6 +249,9 @@ public class MainWindowController {
         deleteSchemeButton.toFront();
     }
 
+    /**
+     * Method that clears the whole scene
+     */
     @FXML
     protected void clearScheme(){
         BlockConnectionHandling.clearScheme();
