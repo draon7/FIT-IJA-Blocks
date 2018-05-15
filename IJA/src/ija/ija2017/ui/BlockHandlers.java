@@ -94,12 +94,29 @@ public class BlockHandlers {
     static void handleMoveDrag(MouseEvent e, AbstractBlockUI blockReference, ArrayList<Path> paths){
         List<InputPort> inputPorts = blockReference.getInputPorts();
         List<OutputPort> outputPorts = blockReference.getOutputPorts();
-        double deltaX = e.getSceneX() - blockReference.getPositionX();
-        double deltaY = e.getSceneY() - blockReference.getPositionY();
+        double deltaX;
+        double deltaY;
+
+        if((e.getSceneX() - blockReference.getPositionX() + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX()) < 0){
+            deltaX = 0;
+        }else if((blockReference.getParent().getWidth() - (blockReference.getBlock().getLayoutBounds().getMaxX() +  blockReference.getBlock().getLayoutX())) < 0){
+            if(e.getSceneX() - blockReference.getPositionX() < 0){deltaX = e.getSceneX() - blockReference.getPositionX();}
+            else{deltaX = 0;}
+        }
+        else{deltaX = e.getSceneX() - blockReference.getPositionX();}
+        if((e.getSceneY() - blockReference.getPositionY() + blockReference.getBlock().getLayoutBounds().getMinY() + blockReference.getBlock().getLayoutY()) < 0){
+            deltaY = 0;
+        }else if((blockReference.getParent().getHeight() - (blockReference.getBlock().getLayoutBounds().getMaxY() + blockReference.getBlock().getLayoutY())) < 0){
+            if(e.getSceneY() - blockReference.getPositionY() < 0){deltaY = e.getSceneY() - blockReference.getPositionY();}
+            else{deltaY = 0;}
+        }
+        else{deltaY = e.getSceneY() - blockReference.getPositionY();}
+
         double newX = deltaX + blockReference.getBlock().getLayoutBounds().getMinX() + blockReference.getBlock().getLayoutX();
         double newY = deltaY + blockReference.getBlock().getLayoutBounds().getMinY() + blockReference.getBlock().getLayoutY();
-        if(newX < 0)
-            newX = 0;
+        if(newX < 0){newX = 0;}
+        if(newY < 0){newY = 0;}
+
 
 
         MoveTo startPoint = new MoveTo();
@@ -133,7 +150,7 @@ public class BlockHandlers {
 
                 startPoint.setX(startX);
                 startPoint.setY(startY);
-                endPoint.setX(cubicCurveTo.getX()+deltaX);
+                endPoint.setX(cubicCurveTo.getX() + deltaX);
                 endPoint.setY(cubicCurveTo.getY()+deltaY);
 
                 calculateInputCurve(cubicCurveTo, startPoint, endPoint);

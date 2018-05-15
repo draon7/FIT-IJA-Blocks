@@ -245,6 +245,11 @@ public class MainWindowController {
         deleteSchemeButton.toFront();
     }
 
+    /*@FXML
+    protected void clearScheme(){
+        BlockConnectionHandling.clearScheme();
+    }*/
+
     /**
      * method to add tab to tab list
      * @param s name of tab item
@@ -289,6 +294,8 @@ public class MainWindowController {
     protected void renameScheme(){
         TextInputDialog dialog = new TextInputDialog("new name");
         dialog.setTitle("rename");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
         dialog.setContentText("enter new name");
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent())
