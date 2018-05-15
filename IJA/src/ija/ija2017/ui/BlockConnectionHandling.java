@@ -72,12 +72,23 @@ public class BlockConnectionHandling {
         runButton = runBut;
     }
 
+    /**
+     * Method that disables buttons and highlighted block after changes in scheme
+     */
     public static void disableButtons(){
+        if(activeScheme.getPreviousBlock() != null){
+            activeScheme.getPreviousBlock().setStroke(BlockColors.blocStrokeColor);
+            activeScheme.getPreviousBlock().setFill(BlockColors.blockFillColor);
+        }
         runButton.setTextFill(Color.RED);
         stepButton.setTextFill(Color.RED);
         runButton.setDisable(true);
         stepButton.setDisable(true);
     }
+
+    /**
+     * Method that enables buttons after checking scheme
+     */
     public static void enableButtons(){
         runButton.setTextFill(Color.color(0.15,0.15,0.15,1));
         stepButton.setTextFill(Color.color(0.15,0.15,0.15,1));

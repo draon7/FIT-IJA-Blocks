@@ -69,6 +69,10 @@ public class BlockHandlers {
         }
     }
 
+    /**
+     * Adds mouse handlers to block base
+     * @param blockReference reference to block
+     */
     static void addMoveRemoveHandles(AbstractBlockUI blockReference){
         blockReference.getBlock().getChildren().get(0).setOnMousePressed(event -> {
             if(event.getButton() == MouseButton.SECONDARY){
@@ -87,10 +91,22 @@ public class BlockHandlers {
         });
     }
 
+    /**
+     * OnMousePressed handle - resets mouse position
+     * @param e MouseEvent
+     * @param blockReference reference to block
+     */
     static void handleMoveStart(MouseEvent e, AbstractBlockUI blockReference){
         blockReference.setPositionX(e.getSceneX());
         blockReference.setPositionY(e.getSceneY());
     }
+
+    /**
+     * OnMouseDragged
+     * @param e
+     * @param blockReference
+     * @param paths
+     */
     static void handleMoveDrag(MouseEvent e, AbstractBlockUI blockReference, ArrayList<Path> paths){
         List<InputPort> inputPorts = blockReference.getInputPorts();
         List<OutputPort> outputPorts = blockReference.getOutputPorts();
