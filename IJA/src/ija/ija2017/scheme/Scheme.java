@@ -94,6 +94,7 @@ public class Scheme implements Serializable {
      */
     public boolean calculateOrder () {
         boolean found;
+        orderBlockList.clear();
         while (blockList.size() != orderBlockList.size()) {
             found = false;
             for (IBlock block : blockList) {
