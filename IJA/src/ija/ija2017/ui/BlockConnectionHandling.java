@@ -164,6 +164,10 @@ public class BlockConnectionHandling {
         getSchemes().add(newScheme);
         changeScheme(id);
     }
+    public static void clearScheme(){
+        activeScheme.getView().getChildren().clear();
+        activeScheme.getBlockList().clear();
+    }
 
     public static void changeScheme(String id){
         for (Scheme scheme : getSchemes()) {

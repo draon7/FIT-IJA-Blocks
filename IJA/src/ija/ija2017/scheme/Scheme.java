@@ -86,7 +86,10 @@ public class Scheme implements Serializable {
     public void addBlock (IBlock block) {
         blockList.add(block);
     }
-    public void removeBlock (IBlock block) {blockList.remove(block);orderBlockList.remove(block);}
+    public void removeBlock (IBlock block) {
+        view.getChildren().remove(block);
+        blockList.remove(block);
+        orderBlockList.remove(block);}
 
     /**
      * Calculate order of computation

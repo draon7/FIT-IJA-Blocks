@@ -245,10 +245,10 @@ public class MainWindowController {
         deleteSchemeButton.toFront();
     }
 
-    /*@FXML
+    @FXML
     protected void clearScheme(){
         BlockConnectionHandling.clearScheme();
-    }*/
+    }
 
     /**
      * method to add tab to tab list
