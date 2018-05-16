@@ -134,14 +134,16 @@ public final class BlockCreateUI {
      * @param blockReference reference to block
      */
     public static void ReloadPaths(AbstractBlockUI blockReference){
-        MoveTo start = new MoveTo();
-        MoveTo end = new MoveTo();
+        MoveTo start;
+        MoveTo end;
         for(InputPort inPort : blockReference.getInputPorts()){
             OutputPort outPort = inPort.getConnection();
             if(outPort != null){
                 Path pathOut = outPort.getPath();
 
                 if(pathOut.getElements().size() > 1){continue;}
+                start = new MoveTo();
+                end = new MoveTo();
                 end.setX(outPort.getPortCircle().getCenterX()+outPort.getPortCircle().getParent().getLayoutX());
                 end.setY(outPort.getPortCircle().getCenterY()+outPort.getPortCircle().getParent().getLayoutY());
 
@@ -152,6 +154,9 @@ public final class BlockCreateUI {
                 start.setX(circle.getCenterX()+circle.getParent().getLayoutX());
                 start.setY(circle.getCenterY()+circle.getParent().getLayoutY());
                 path.getElements().add(start);
+
+                System.out.println("In Port Y: " + start.getY());
+                System.out.println("In Port X: " + start.getX());
 
                 CubicCurveTo curve = new CubicCurveTo();
                 BlockHandlers.calculateInputCurve(curve, start, end);
@@ -165,6 +170,8 @@ public final class BlockCreateUI {
                 Path pathIn = inPort.getPath();
 
                 if(pathIn.getElements().size() > 1){continue;}
+                start = new MoveTo();
+                end = new MoveTo();
                 end.setX(inPort.getPortCircle().getCenterX()+inPort.getPortCircle().getParent().getLayoutX());
                 end.setY(inPort.getPortCircle().getCenterY()+inPort.getPortCircle().getParent().getLayoutY());
 
@@ -175,6 +182,7 @@ public final class BlockCreateUI {
                 start.setX(circle.getCenterX()+circle.getParent().getLayoutX());
                 start.setY(circle.getCenterY()+circle.getParent().getLayoutY());
                 path.getElements().add(start);
+
 
                 CubicCurveTo curve = new CubicCurveTo();
                 BlockHandlers.calculateOutputCurve(curve, start, end);
